@@ -71,19 +71,33 @@ immutable FredSeries{T<:AbstractString}
     title::T
     units_short::T
     units::T
-    seasonal_adjustment_short::T
-    seasonal_adjustment::T
-    frequency_short::T
-    frequency::T
+    seas_adj_short::T
+    seas_adj::T
+    freq_short::T
+    freq::T
     realtime_start::T
     realtime_end::T
     last_updated::DateTime
     notes::T
 
     # From series/observations query
-    transformation_short::T # "units"
+    trans_short::T # "units"
     data::DataFrames.DataFrame
 end
+id(f::FredSeries) = f.id
+title(f::FredSeries) = f.title
+units_short(f::FredSeries) = f.units_short
+units(f::FredSeries) = f.units
+seas_adj_short(f::FredSeries) = f.seas_adj_short
+seas_adj(f::FredSeries) = f.seas_adj
+freq_short(f::FredSeries) = f.freq_short
+freq(f::FredSeries) = f.freq
+realtime_start(f::FredSeries) = f.realtime_start
+realtime_end(f::FredSeries) = f.realtime_end
+last_updated(f::FredSeries) = f.last_updated
+notes(f::FredSeries) = f.notes
+trans_short(f::FredSeries) = f.trans_short
+data(f::FredSeries) = f.data
 
 include("series.jl")
 
