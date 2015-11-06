@@ -32,11 +32,11 @@ Notes
 A valid registration key increases the allowable number of requests per day as well making
 catalog metadata available.
 """
-type Fred
-    key::ASCIIString
-    url::ASCIIString
+type Fred{T<:AbstractString}
+    key::T
+    url::T
 end
-Fred(key::ASCIIString) =  Fred(key, DEFAULT_API_URL)
+Fred(key) =  Fred(key, DEFAULT_API_URL)
 function Fred()
     key = try
         open(joinpath(homedir(),".freddatarc"), "r") do f
@@ -60,25 +60,25 @@ function Fred()
 end
 get_api_key(b::Fred) = b.key
 get_api_url(b::Fred) = b.url
-set_api_url(b::Fred, url::ASCIIString) = setfield!(b, :url, url)
+set_api_url{T}(b::Fred{T}, url::T) = setfield!(b, :url, url)
 
-immutable FredSeries
+immutable FredSeries{T<:AbstractString}
     # From series query
-    id::ASCIIString
-    title::ASCIIString
-    units_short::ASCIIString
-    units::ASCIIString
-    seasonal_adjustment_short::ASCIIString
-    seasonal_adjustment::ASCIIString
-    frequency_short::ASCIIString
-    frequency::ASCIIString
-    realtime_start::ASCIIString
-    realtime_end::ASCIIString
+    id::T
+    title::T
+    units_short::T
+    units::T
+    seasonal_adjustment_short::T
+    seasonal_adjustment::T
+    frequency_short::T
+    frequency::T
+    realtime_start::T
+    realtime_end::T
     last_updated::DateTime
-    notes::ASCIIString
+    notes::T
 
     # From series/observations query
-    transformation_short::ASCIIString # "units"
+    transformation_short::T # "units"
     data::DataFrames.DataFrame
 end
 

@@ -1,5 +1,5 @@
 using FredData
 using Base.Test
 
-# write your own tests here
-@test 1 == 1
+f = Fred()
+s = get_data(f, "GDPC1")
