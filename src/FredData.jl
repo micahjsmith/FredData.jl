@@ -62,6 +62,24 @@ get_api_key(b::Fred) = b.key
 get_api_url(b::Fred) = b.url
 set_api_url(b::Fred, url::ASCIIString) = setfield!(b, :url, url)
 
+immutable FredSeries
+    # From series query
+    id::ASCIIString
+    title::ASCIIString
+    units_short::ASCIIString
+    units::ASCIIString
+    seasonal_adjustment_short::ASCIIString
+    seasonal_adjustment::ASCIIString
+    frequency_short::ASCIIString
+    frequency::ASCIIString
+    realtime_start::ASCIIString
+    realtime_end::ASCIIString
+
+    # From series/observations query
+    transformation::ASCIIString # "units"
+    data::DataFrames.DataFrame
+end
+
 include("series.jl")
 
 end # module
