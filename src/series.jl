@@ -1,6 +1,7 @@
 """
+`get_data{T<:AbstractString}(f::Fred, series::T)`
 """
-function get_data(f::Fred, series::ASCIIString)
+function get_data{T<:AbstractString}(f::Fred, series::T)
     # Setup
     metadata_url = get_api_url(f) * "series"
     obs_url      = get_api_url(f) * "series/observations"
@@ -27,6 +28,7 @@ function get_data(f::Fred, series::ASCIIString)
     realtime_end              = metadata_json["seriess"][1]["realtime_end"]
     notes                     = metadata_json["seriess"][1]["notes"]
 
+    # the last three chars are -05, for CST in St. Louis
     tmp = metadata_json["seriess"][1]["last_updated"]
     zone = tmp[end-2:end]
     last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")

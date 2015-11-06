@@ -1,7 +1,7 @@
 module FredData
 
-using Requests
 using DataFrames
+using Requests
 import Requests: get
 import JSON
 
@@ -19,18 +19,16 @@ A connection to the Fred API.
 
 Constructors
 ------------
-Fred()                                          # Default connection
-Fred(key::ASCIIString; url::ASCIIString)  # Custom connection
+Fred()                     # Default connection, reading from ~/.freddatarc
+Fred(key::AbstractString)  # Custom connection
 
 Arguments
 ---------
-*`url`: Base url to the Fred API.
 *`key`: Registration key provided by the Fred.
 
 Notes
 -----
-A valid registration key increases the allowable number of requests per day as well making
-catalog metadata available.
+Set the API url with `set_api_url{T}(f::Fred{T}, url::T)`
 """
 type Fred{T<:AbstractString}
     key::T
@@ -58,10 +56,15 @@ function Fred()
 
     return Fred(key)
 end
-get_api_key(b::Fred) = b.key
-get_api_url(b::Fred) = b.url
-set_api_url{T}(b::Fred{T}, url::T) = setfield!(b, :url, url)
+get_api_key(f::Fred) = b.key
+get_api_url(f::Fred) = b.url
+set_api_url{T}(f::Fred{T}, url::T) = setfield!(f, :url, url)
 
+"""
+`FredSeries(...)`
+
+Represent a single data series, and all associated metadata, return from Fred.
+"""
 immutable FredSeries{T<:AbstractString}
     # From series query
     id::T
