@@ -74,9 +74,11 @@ immutable FredSeries
     frequency::ASCIIString
     realtime_start::ASCIIString
     realtime_end::ASCIIString
+    last_updated::DateTime
+    notes::ASCIIString
 
     # From series/observations query
-    transformation::ASCIIString # "units"
+    transformation_short::ASCIIString # "units"
     data::DataFrames.DataFrame
 end
 
