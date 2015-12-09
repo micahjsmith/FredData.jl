@@ -1,11 +1,16 @@
+isdefined(Base, :__precompile__) && __precompile__()
+
 module FredData
 
-using DataFrames
 using Requests
+using DataFrames
 import Requests: get
 import JSON
 
-export Fred, get_data
+export Fred, get_api_url, set_api_url!, get_api_key
+export FredSeries, id, title, units_short, units, seas_adj_short, seas_adj, freq_short, 
+       freq, realtime_start, realtime_end, last_updated, notes, trans_short, df
+export get_data
 
 const MAX_ATTEMPTS = 3
 const FIRST_REALTIME = Date(1776,07,04)
@@ -19,27 +24,30 @@ A connection to the Fred API.
 
 Constructors
 ------------
-Fred()                     # Default connection, reading from ~/.freddatarc
-Fred(key::AbstractString)  # Custom connection
+- `Fred()`                     # Default connection, reading from ~/.freddatarc
+- `Fred(key::AbstractString)`  # Custom connection
 
 Arguments
 ---------
-*`key`: Registration key provided by the Fred.
+- `key`: Registration key provided by the Fred.
 
 Notes
 -----
-Set the API url with `set_api_url{T}(f::Fred{T}, url::T)`
+- Set the API url with `set_api_url!(f::Fred, url::AbstractString)`
 """
-type Fred{T<:AbstractString}
-    key::T
-    url::T
+type Fred
+    key::AbstractString
+    url::AbstractString
 end
 Fred(key) =  Fred(key, DEFAULT_API_URL)
 function Fred()
-    key = try
+    key = ""
+    try
         open(joinpath(homedir(),".freddatarc"), "r") do f
-            readall(f)
+            key = readall(f)
         end
+        key = rstrip(key)
+        @printf "API key loaded.\n"
     catch err
         @printf STDERR "Add Fred API key to ~/.freddatarc\n"
         rethrow(err)
@@ -56,33 +64,52 @@ function Fred()
 
     return Fred(key)
 end
-get_api_key(f::Fred) = b.key
-get_api_url(f::Fred) = b.url
-set_api_url{T}(f::Fred{T}, url::T) = setfield!(f, :url, url)
+get_api_key(f::Fred) = f.key
+get_api_url(f::Fred) = f.url
+set_api_url!(f::Fred, url::AbstractString) = setfield!(f, :url, url)
 
 """
-`FredSeries(...)`
+```
+FredSeries(...)
+```
 
 Represent a single data series, and all associated metadata, return from Fred.
+
+### Field access
+- `id(f)`
+- `title(f)`
+- `units_short(f)`
+- `units(f)`
+- `seas_adj_short(f)`
+- `seas_adj(f)`
+- `freq_short(f)`
+- `freq(f)`
+- `realtime_start(f)`
+- `realtime_end(f)`
+- `last_updated(f)`
+- `notes(f)`
+- `trans_short(f)`
+- `df(f)`
+
 """
-immutable FredSeries{T<:AbstractString}
+immutable FredSeries
     # From series query
-    id::T
-    title::T
-    units_short::T
-    units::T
-    seas_adj_short::T
-    seas_adj::T
-    freq_short::T
-    freq::T
-    realtime_start::T
-    realtime_end::T
+    id::AbstractString
+    title::AbstractString
+    units_short::AbstractString
+    units::AbstractString
+    seas_adj_short::AbstractString
+    seas_adj::AbstractString
+    freq_short::AbstractString
+    freq::AbstractString
+    realtime_start::AbstractString
+    realtime_end::AbstractString
     last_updated::DateTime
-    notes::T
+    notes::AbstractString
 
     # From series/observations query
-    trans_short::T # "units"
-    data::DataFrames.DataFrame
+    trans_short::AbstractString # "units"
+    df::DataFrames.DataFrame
 end
 id(f::FredSeries) = f.id
 title(f::FredSeries) = f.title
@@ -97,8 +124,8 @@ realtime_end(f::FredSeries) = f.realtime_end
 last_updated(f::FredSeries) = f.last_updated
 notes(f::FredSeries) = f.notes
 trans_short(f::FredSeries) = f.trans_short
-data(f::FredSeries) = f.data
+df(f::FredSeries) = f.df
 
-include("series.jl")
+include("get_data.jl")
 
 end # module

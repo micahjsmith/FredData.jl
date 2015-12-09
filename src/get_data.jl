@@ -1,17 +1,18 @@
 """
-`get_data{T<:AbstractString}(f::Fred, series::T)`
+```
+get_data{T<:AbstractString}(f::Fred, series::T)
+```
 """
 function get_data{T<:AbstractString}(f::Fred, series::T)
     # Setup
     metadata_url = get_api_url(f) * "series"
     obs_url      = get_api_url(f) * "series/observations"
     key          = get_api_key(f)
-    query        = Dict()
 
     # Add query parameters
-    query["api_key"]   = key
-    query["file_type"] = "json"
-    query["series_id"] = series
+    query = Dict("api_key"   => key,
+                 "file_type" => "json",
+                 "series_id" => series)
 
     # Query and extract metadata
     metadata = get(metadata_url; query=query)
@@ -38,11 +39,11 @@ function get_data{T<:AbstractString}(f::Fred, series::T)
     obs_json = Requests.json(obs)
 
     transformation_short = obs_json["units"]
-    data = parse_observations(obs_json["observations"])
+    df = parse_observations(obs_json["observations"])
 
     return FredSeries(id, title, units_short, units, seasonal_adjustment_short,
                       seasonal_adjustment, frequency_short, frequency, realtime_start,
-                      realtime_end, last_updated, notes, transformation_short, data)
+                      realtime_end, last_updated, notes, transformation_short, df)
 end
 
 # obs is a vector, of which each element is a dict with four fields,
