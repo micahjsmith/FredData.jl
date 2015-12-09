@@ -68,6 +68,13 @@ get_api_key(f::Fred) = f.key
 get_api_url(f::Fred) = f.url
 set_api_url!(f::Fred, url::AbstractString) = setfield!(f, :url, url)
 
+function Base.show(io::IO, f::Fred)
+    @printf io "FRED API Connection\n"
+    @printf io "\turl: %s\n" get_api_url(f)
+    @printf io "\tkey: %s\n" get_api_key(f)
+end
+
+
 """
 ```
 FredSeries(...)
@@ -122,9 +129,30 @@ freq(f::FredSeries) = f.freq
 realtime_start(f::FredSeries) = f.realtime_start
 realtime_end(f::FredSeries) = f.realtime_end
 last_updated(f::FredSeries) = f.last_updated
-notes(f::FredSeries) = f.notes
+function notes(f::FredSeries)
+    str = f.notes
+    str = replace(str, r"[\r\n]", " ")
+    str = replace(str, r" +", " ")
+    str = strip(str)
+    return str
+end
 trans_short(f::FredSeries) = f.trans_short
 df(f::FredSeries) = f.df
+
+function Base.show(io::IO, s::FredSeries)
+    @printf io "FredSeries\n"
+    @printf io "\tid: %s\n"             id(s)
+    @printf io "\ttitle: %s\n"          title(s)
+    @printf io "\tunits: %s\n"          units(s)
+    @printf io "\tseas_adj: %s\n"       seas_adj(s)
+    @printf io "\tfreq: %s\n"           freq(s)
+    @printf io "\trealtime_start: %s\n" realtime_start(s)
+    @printf io "\trealtime_end: %s\n"   realtime_end(s)
+    @printf io "\tlast_updated: %s\n"   last_updated(s)
+    @printf io "\tnotes: %s\n"          notes(s)
+    @printf io "\ttrans_short: %s\n"    trans_short(s)
+    @printf io "\tdf: %dx%d DataFrame with columns %s\n" size(df(s))... names(df(s))
+end
 
 include("get_data.jl")
 
