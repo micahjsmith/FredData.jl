@@ -10,29 +10,31 @@ Request one series using the FRED API.
 - `series`: series mnemonic
 
 ### Optional Arguments
-- `kwargs...`: key-value pairs to be appended to the FRED request. Accepted keys include:
-  - `realtime_start`: the startof the real-time period as YYYY-MM-DD string
-  - `realtime_end`: the end of the real-time period as YYYY-MM-DD string
-  - `limit`: maximum number of results to return
-  - `offset`: non-negative integer
-  - `sort_order`: `"asc"`, `"desc`"
-  - `observation_start`: the start of the observation period as YYYY-MM-DD string
-  - `observation_end`: the end of the observation period as YYYY-MM-DD string
-  - `units`: one of `"lin"`, `"chg"`, `"ch1"`, `"pch"`, `"pc1"`, `"pca"`, `"cch"`, `"cca"`,
-    `"log`"
-  - `frequency`: one of `"d"`, `"w"`, `"bw"`, `"m"`, `"q"`, `"sa"`, `"a"`, `"wef"`,
-    `"weth"`, `"wew"`, `"wetu"`, `"wem"`, `"wesu"`, `"wesa"`, `"bwew"`, `"bwem`"
-  - `aggregation_method`: one of `"avg"`, `"sum"`, `"eop"`
-  - `output_type`: output type
-    1. obsevations by real-time period
-    2. observations by vintage date, all observations
-    3. observations by vintage date, new and revised observations only
-    4. observations, initial release only
-  - `vintage_dates`: comma-separated string of YYYY-MM-DD vintage dates
+`kwargs...`: key-value pairs to be appended to the FRED request. Accepted keys include:
+
+- `realtime_start`: the start of the real-time period as YYYY-MM-DD string
+- `realtime_end`: the end of the real-time period as YYYY-MM-DD string
+- `limit`: maximum number of results to return
+- `offset`: non-negative integer
+- `sort_order`: `"asc"`, `"desc`"
+- `observation_start`: the start of the observation period as YYYY-MM-DD string
+- `observation_end`: the end of the observation period as YYYY-MM-DD string
+- `units`: one of `"lin"`, `"chg"`, `"ch1"`, `"pch"`, `"pc1"`, `"pca"`, `"cch"`, `"cca"`,
+  `"log`"
+- `frequency`: one of `"d"`, `"w"`, `"bw"`, `"m"`, `"q"`, `"sa"`, `"a"`, `"wef"`,
+  `"weth"`, `"wew"`, `"wetu"`, `"wem"`, `"wesu"`, `"wesa"`, `"bwew"`, `"bwem`"
+- `aggregation_method`: one of `"avg"`, `"sum"`, `"eop"`
+- `output_type`: one of `1` (obsevations by real-time period), `2` (observations by vintage
+  date, all observations), `3` (observations by vintage date, new and revised observations
+  only), `4` (observations, initial release only)
+- `vintage_dates`: vintage dates as comma-separated YYYY-MM-DD strings
 
 
 """
 function get_data(f::Fred, series::AbstractString; kwargs...)
+    # Validation
+    validate_kwargs(kwargs)
+
     # Setup
     metadata_url = get_api_url(f) * "series"
     obs_url      = get_api_url(f) * "series/observations"
@@ -47,7 +49,7 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
     # Query observations. Expand query dict with kwargs. Do this first so we can use the
     # calculated realtime values for the metadata request.
     for (i,j) in kwargs
-        query_obs[string(i)] = j
+        query_obs[string(i)] = string(j)
     end
     obs = get(obs_url; query=query_obs)
     obs_json = Requests.json(obs)
@@ -93,11 +95,75 @@ end
 # - value
 function parse_observations(obs::Vector)
     n_obs = length(obs)
-    values = Vector{Float64}(n_obs)
-    dates  = Vector{Date}(n_obs)
+    value = Vector{Float64}(n_obs)
+    date  = Vector{Date}(n_obs)
+    realtime_start = Vector{Date}(n_obs)
+    realtime_end = Vector{Date}(n_obs)
     for (i, x) in enumerate(obs)
-        values[i] = parse(Float64, x["value"])
-        dates[i]  = Date(x["date"], "yyyy-mm-dd")
+        try
+            value[i] = parse(Float64, x["value"])
+        catch err
+            value[i] = NaN
+        end
+        date[i]           = Date(x["date"], "yyyy-mm-dd")
+        realtime_start[i] = Date(x["realtime_start"], "yyyy-mm-dd")
+        realtime_end[i]   = Date(x["realtime_end"], "yyyy-mm-dd")
     end
-    return DataFrame(dates=dates, values=values)
+    return DataFrame(realtime_start=realtime_start, realtime_end=realtime_end,
+                     date=date, value=value)
+end
+
+# Make sure everything is of the right format.
+# kwargs is an vector of Tuple{Symbol, Any}.
+isyyyymmdd(x) = ismatch(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x)
+function validate_kwargs(kwargs)
+    d = Dict(kwargs)
+
+    # dates
+    for k in [:realtime_start, :realtime_end, :observation_start, :observation_end]
+        if (v = pop!(d, k, nothing)) != nothing && !isyyyymmdd(v)
+                error(k, ": Invalid date format: ", v)
+        end
+    end
+    # limit and offset
+    for k in [:limit, :offset]
+        if (v = pop!(d, k, nothing)) != nothing &&
+            ( !(typeof(v) <: Number ) || typeof(v) <: Number && !(v>0) )
+                error(k, ": Invalid format: ", v)
+        end
+    end
+    # units
+    if (v = pop!(d, :units, nothing)) != nothing &&
+        v ∉ ["lin", "chg", "ch1", "pch", "pc1", "pca", "cch", "log"]
+            error(:units, ": Invalid format: ", v)
+    end
+    # frequency
+    if (v = pop!(d, :frequency, nothing)) != nothing &&
+        v ∉ ["d", "w", "bw", "m", "q", "sa", "a", "wef", "weth", "wew", "wetu", "wem",
+             "wesu", "wesa", "bwew", "bwem"]
+            error(:frequency, ": Invalid format: ", v)
+    end
+    # aggregation_method
+    if (v = pop!(d, :aggregation_method, nothing)) != nothing &&
+        v ∉ ["avg", "sum", "eop"]
+            error(:aggregation_method, ": Invalid format: ", v)
+    end
+    # output_type
+    if (v = pop!(d, :output_type, nothing)) != nothing &&
+        v ∉ [1, 2, 3, 4]
+            error(:output_type, ": Invalid format: ", v)
+    end
+    # vintage dates, and too early vintages
+    if (v = pop!(d, :vintage_dates, nothing)) != nothing
+        vds_arr = split(string(v), ",")
+        vds_bad = map(x -> !isyyyymmdd(x), vds_arr)
+        if any(vds_bad)
+            error(:vintage_dates, ": Invalid date format: ", vds_arr[vds_bad])
+        end
+        vds_early = map(x -> x<EARLY_VINTAGE_DATE, vds_arr)
+        if any(vds_early)
+            warn(:vintage_dates, ": Early vintage date, data might not exist: ",
+                vds_arr[vds_early])
+        end
+    end
 end

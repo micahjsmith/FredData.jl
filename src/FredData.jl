@@ -15,6 +15,7 @@ export get_data
 const MAX_ATTEMPTS = 3
 const FIRST_REALTIME = Date(1776,07,04)
 const LAST_REALTIME  = Date(9999,12,31)
+const EARLY_VINTAGE_DATE = "1991-01-01"
 const DEFAULT_API_URL = "http://api.stlouisfed.org/fred/"
 const API_KEY_LENGTH  = 32
 
@@ -150,7 +151,7 @@ function Base.show(io::IO, s::FredSeries)
     @printf io "\trealtime_end: %s\n"          realtime_end(s)
     @printf io "\tlast_updated: %s\n" last_updated(s)
     @printf io "\tnotes: %s\n"        notes(s)
-    @printf io "\ttrans_short (actual): %s\n"  trans_short(s)
+    @printf io "\ttrans_short: %s\n"  trans_short(s)
     @printf io "\tdf: %dx%d DataFrame with columns %s\n" size(df(s))... names(df(s))
 end
 
