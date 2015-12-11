@@ -1,5 +1,4 @@
 using FredData
 using Base.Test
 
-f = Fred()
-s = get_data(f, "GDPC1")
+@test 1==1
