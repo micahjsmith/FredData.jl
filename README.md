@@ -1,8 +1,8 @@
 # FredData
 [![Build Status](https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master)](https://travis-ci.org/micahjsmith/FredData.jl)
 
-A third-party Julia libray to pull data from
-[Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/")
+A third-party Julia library to pull data from
+[Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/)
 (FRED) using their [Developer API](https://research.stlouisfed.org/docs/api/).
 
 You must register an API key [here](https://research.stlouisfed.org/docs/api/api_key.html)
@@ -13,7 +13,7 @@ in order to pull from the FRED servers.
 *FredData* is not affiliated in any way with Federal Reserve Bank of St. Louis and is not
 officially maintained or otherwise supported by Federal Reserve Bank of St. Louis.
 
-*FredData* is free software and is issued under the MIT [license](LICENSE).
+*FredData* is free software and is issued under the MIT [license](LICENSE.md).
 
 ## Setup
 
