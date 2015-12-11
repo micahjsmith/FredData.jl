@@ -1,6 +1,6 @@
 # FredData
 
-A basic Julia interface to pull data from
+A Julia interface to pull data from
 [Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/")
 (FRED) using their [Developer API](https://research.stlouisfed.org/docs/api/).
 
@@ -15,14 +15,17 @@ julia> Pkg.add("FredData")
 ```
 
 Now, register your FRED API key and make it accessible to *FredData* in one of two ways:
+
 1. Populate the environment variable `FRED_API_KEY`.
-```bash
-export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456
-```
+
+    ```bash
+    export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456
+    ```
 2. Populate a configuration file `~/.freddatarc`.
-```bash
-echo abcdefghijklmnopqrstuvwxyz123456 > ~/.freddatarc
-```
+
+    ```bash
+    echo abcdefghijklmnopqrstuvwxyz123456 > ~/.freddatarc
+    ```
 
 ## Usage
 
@@ -81,25 +84,25 @@ Get and set fields.
 The `FredSeries` type contains the data in a query response.
 
 Get fields.
-- `id(f)`: Series ID
-- `title(f)`: Series title
-- `units_short(f)`: Units (abbr.)
-- `units(f)`: Units
-- `seas_adj_short(f)`: Seasonal adjustment (abbr.)
-- `seas_adj(f)`: Seasonal adjustment
-- `freq_short(f)`: *Native* frequency (abbr.)
-- `freq(f)`: *Native* frequency
-- `realtime_start(f)`: Date realtime period starts
-- `realtime_end(f)`: Date realtime period ends
-- `last_updated(f)`: Date series last updated
-- `notes(f)`: Series notes
-- `trans_short(f)`: Transformation of queried data (abbr.)
-- `df(f)`: The actual data; DataFrame with columns `:realtime_start`, `:realtime_end`,
+- `id(s::FredSeries)`: Series ID
+- `title(s::FredSeries)`: Series title
+- `units_short(s::FredSeries)`: Units (abbr.)
+- `units(s::FredSeries)`: Units
+- `seas_adj_short(s::FredSeries)`: Seasonal adjustment (abbr.)
+- `seas_adj(s::FredSeries)`: Seasonal adjustment
+- `freq_short(s::FredSeries)`: *Native* frequency (abbr.)
+- `freq(s::FredSeries)`: *Native* frequency
+- `realtime_start(s::FredSeries)`: Date realtime period starts
+- `realtime_end(s::FredSeries)`: Date realtime period ends
+- `last_updated(s::FredSeries)`: Date series last updated
+- `notes(s::FredSeries)`: Series notes
+- `trans_short(s::FredSeries)`: Transformation of queried data (abbr.)
+- `df(s::FredSeries)`: The actual data; DataFrame with columns `:realtime_start`, `:realtime_end`,
   `:date`, `:value`
 
 ## Notes
 
-Todo list:
-☐ improve test coverage
-☐ support creation of pseudo-vintages
-☐ support methods to query other parts of the API, such as releases, tags, and search
+Todo list:  
+☐ improve test coverage  
+☐ support creation of pseudo-vintages  
+☐ support methods to query other parts of the API, such as releases, tags, and search  
