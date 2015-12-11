@@ -142,15 +142,15 @@ df(f::FredSeries) = f.df
 function Base.show(io::IO, s::FredSeries)
     @printf io "FredSeries\n"
     @printf io "\tid: %s\n"                    id(s)
-    @printf io "\ttitle (native): %s\n"        title(s)
+    @printf io "\ttitle: %s\n"        title(s)
     @printf io "\tunits: %s\n"                 units(s)
     @printf io "\tseas_adj (native): %s\n"     seas_adj(s)
     @printf io "\tfreq (native): %s\n"         freq(s)
     @printf io "\trealtime_start: %s\n"        realtime_start(s)
     @printf io "\trealtime_end: %s\n"          realtime_end(s)
-    @printf io "\tlast_updated (native): %s\n" last_updated(s)
-    @printf io "\tnotes (native): %s\n"        notes(s)
-    @printf io "\ttrans_short (native): %s\n"  trans_short(s)
+    @printf io "\tlast_updated: %s\n" last_updated(s)
+    @printf io "\tnotes: %s\n"        notes(s)
+    @printf io "\ttrans_short (actual): %s\n"  trans_short(s)
     @printf io "\tdf: %dx%d DataFrame with columns %s\n" size(df(s))... names(df(s))
 end
 

@@ -39,13 +39,33 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
     key          = get_api_key(f)
 
     # Add query parameters
-    query = Dict("api_key"   => key,
+    query_metadata = Dict("api_key"   => key,
                  "file_type" => "json",
                  "series_id" => series)
+    query_obs = query_metadata
 
-    # Query and extract metadata
-    metadata = get(metadata_url; query=query)
+    # Query observations. Expand query dict with kwargs. Do this first so we can use the
+    # calculated realtime values for the metadata request.
+    for (i,j) in kwargs
+        query_obs[string(i)] = j
+    end
+    obs = get(obs_url; query=query_obs)
+    obs_json = Requests.json(obs)
+
+    # Parse observations
+    realtime_start  = obs_json["realtime_start"]
+    realtime_end    = obs_json["realtime_end"]
+    transformation_short = obs_json["units"]
+
+    df = parse_observations(obs_json["observations"])
+
+    # Query metadata
+    query_metadata["realtime_start"] = realtime_start
+    query_metadata["realtime_end"] = realtime_end
+    metadata = get(metadata_url; query=query_metadata)
     metadata_json = Requests.json(metadata)
+
+    # Parse metadata
     id                        = metadata_json["seriess"][1]["id"]
     title                     = metadata_json["seriess"][1]["title"]
     units_short               = metadata_json["seriess"][1]["units_short"]
@@ -60,19 +80,6 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
     tmp = metadata_json["seriess"][1]["last_updated"]
     zone = tmp[end-2:end]
     last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")
-
-    # Query observations. Expand query dict with kwargs.
-    for (i,j) in kwargs
-        query[string(i)] = j
-    end
-    obs = get(obs_url; query=query)
-    obs_json = Requests.json(obs)
-
-    realtime_start  = obs_json["realtime_start"]
-    realtime_end    = obs_json["realtime_end"]
-    transformation_short = obs_json["units"]
-
-    df = parse_observations(obs_json["observations"])
 
     return FredSeries(id, title, units_short, units, seasonal_adjustment_short,
                       seasonal_adjustment, frequency_short, frequency, realtime_start,
