@@ -1,4 +1,5 @@
 # FredData
+[![Build Status](https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master)](https://travis-ci.org/micahjsmith/FredData.jl)
 
 A Julia interface to pull data from
 [Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/")
