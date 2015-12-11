@@ -28,8 +28,6 @@ Request one series using the FRED API.
   date, all observations), `3` (observations by vintage date, new and revised observations
   only), `4` (observations, initial release only)
 - `vintage_dates`: vintage dates as comma-separated YYYY-MM-DD strings
-
-
 """
 function get_data(f::Fred, series::AbstractString; kwargs...)
     # Validation
