@@ -31,7 +31,7 @@ Request one series using the FRED API.
 """
 function get_data(f::Fred, series::AbstractString; kwargs...)
     # Validation
-    validate_kwargs(kwargs)
+    validate_kwargs!(kwargs)
 
     # Setup
     metadata_url = get_api_url(f) * "series"
@@ -54,7 +54,7 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
 
     # Confirm request okay
     if haskey(obs_json, "error_code")
-        error(series, ": ", obs_json["error_message"])
+        error(series, ": ", obs_json["error_message"], " (", obs_json["error_code"],")")
     end
 
     # Parse observations
@@ -119,7 +119,7 @@ end
 # Make sure everything is of the right format.
 # kwargs is an vector of Tuple{Symbol, Any}.
 isyyyymmdd(x) = ismatch(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x)
-function validate_kwargs(kwargs)
+function validate_kwargs!(kwargs)
     d = Dict(kwargs)
 
     # dates
@@ -167,6 +167,13 @@ function validate_kwargs(kwargs)
         if any(vds_early)
             warn(:vintage_dates, ": Early vintage date, data might not exist: ",
                 vds_arr[vds_early])
+        end
+    end
+    # all remaining keys have unspecified behavior
+    if length(d) > 0
+        for k in keys(d)
+            warn(string(k), ": Bad key. Removed from query.")
+            deleteat!(kwargs, find(x -> x[1]==k, kwargs))
         end
     end
 end
