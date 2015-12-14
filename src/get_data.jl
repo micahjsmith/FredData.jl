@@ -52,6 +52,11 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
     obs = get(obs_url; query=query_obs)
     obs_json = Requests.json(obs)
 
+    # Confirm request okay
+    if haskey(obs_json, "error_code")
+        error(series, ": ", obs_json["error_message"])
+    end
+
     # Parse observations
     realtime_start  = obs_json["realtime_start"]
     realtime_end    = obs_json["realtime_end"]
