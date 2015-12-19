@@ -1,4 +1,4 @@
-using DSGE
+using FredData
 using Base.Test
 
 f = Fred()

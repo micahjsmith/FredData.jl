@@ -20,7 +20,7 @@ Request one series using the FRED API.
 - `observation_start`: the start of the observation period as YYYY-MM-DD string
 - `observation_end`: the end of the observation period as YYYY-MM-DD string
 - `units`: one of `"lin"`, `"chg"`, `"ch1"`, `"pch"`, `"pc1"`, `"pca"`, `"cch"`, `"cca"`,
-  `"log`"
+  `"log"`
 - `frequency`: one of `"d"`, `"w"`, `"bw"`, `"m"`, `"q"`, `"sa"`, `"a"`, `"wef"`,
   `"weth"`, `"wew"`, `"wetu"`, `"wem"`, `"wesu"`, `"wesa"`, `"bwew"`, `"bwem`"
 - `aggregation_method`: one of `"avg"`, `"sum"`, `"eop"`
@@ -117,7 +117,7 @@ function parse_observations(obs::Vector)
 end
 
 # Make sure everything is of the right format.
-# kwargs is an vector of Tuple{Symbol, Any}.
+# kwargs is a vector of Tuple{Symbol, Any}.
 isyyyymmdd(x) = ismatch(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x)
 function validate_kwargs!(kwargs)
     d = Dict(kwargs)
