@@ -71,24 +71,29 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
     metadata_json = Requests.json(metadata)
 
     # Parse metadata
-    id                        = metadata_json["seriess"][1]["id"]
-    title                     = metadata_json["seriess"][1]["title"]
-    units_short               = metadata_json["seriess"][1]["units_short"]
-    units                     = metadata_json["seriess"][1]["units"]
-    seasonal_adjustment_short = metadata_json["seriess"][1]["seasonal_adjustment_short"]
-    seasonal_adjustment       = metadata_json["seriess"][1]["seasonal_adjustment"]
-    frequency_short           = metadata_json["seriess"][1]["frequency_short"]
-    frequency                 = metadata_json["seriess"][1]["frequency"]
-    notes                     = metadata_json["seriess"][1]["notes"]
+    metadata_parsed = Dict{Symbol, AbstractString}()
+    for k in ["id", "title", "units_short", "units", "seasonal_adjustment_short",
+        "seasonal_adjustment", "frequency_short", "frequency", "notes"]
+        try
+            metadata_parsed[symbol(k)] = metadata_json["seriess"][1][k]
+        catch err
+            metadata_parsed[symbol(k)] = ""
+            warn("Metadata '$k' not returned from server.")
+        end
+    end
 
     # the last three chars are -05, for CST in St. Louis
     tmp = metadata_json["seriess"][1]["last_updated"]
     zone = tmp[end-2:end]
     last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")
 
-    return FredSeries(id, title, units_short, units, seasonal_adjustment_short,
-                      seasonal_adjustment, frequency_short, frequency, realtime_start,
-                      realtime_end, last_updated, notes, transformation_short, df)
+    return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
+                      metadata_parsed[:units_short], metadata_parsed[:units],
+                      metadata_parsed[:seasonal_adjustment_short],
+                      metadata_parsed[:seasonal_adjustment],
+                      metadata_parsed[:frequency_short], metadata_parsed[:frequency],
+                      realtime_start, realtime_end, last_updated, metadata_parsed[:notes],
+                      transformation_short, df)
 end
 
 # obs is a vector, of which each element is a dict with four fields,
