@@ -10,6 +10,8 @@ Request one series using the FRED API.
 - `series`: series mnemonic
 
 ### Optional Arguments
+- `retries`: number of retries if server error
+
 `kwargs...`: key-value pairs to be appended to the FRED request. Accepted keys include:
 
 - `realtime_start`: the start of the real-time period as YYYY-MM-DD string
@@ -29,7 +31,7 @@ Request one series using the FRED API.
   only), `4` (observations, initial release only)
 - `vintage_dates`: vintage dates as comma-separated YYYY-MM-DD strings
 """
-function get_data(f::Fred, series::AbstractString; kwargs...)
+function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs...)
     # Validation
     validate_kwargs!(kwargs)
 
@@ -40,8 +42,8 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
 
     # Add query parameters
     query_metadata = Dict("api_key"   => key,
-                 "file_type" => "json",
-                 "series_id" => series)
+                          "file_type" => "json",
+                          "series_id" => series)
     query_obs = query_metadata
 
     # Query observations. Expand query dict with kwargs. Do this first so we can use the
@@ -54,7 +56,15 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
 
     # Confirm request okay
     if haskey(obs_json, "error_code")
-        error(series, ": ", obs_json["error_message"], " (", obs_json["error_code"],")")
+
+        # If error 500 (Internal Server Error), we can retry our request. Otherwise, give
+        # up.
+        if obs_json["error_code"] == 500 && retries > 0
+            return get_data(f, series; retries=retries-1, kwargs)
+        else
+            error(series, ": ", obs_json["error_message"], " (", obs_json["error_code"],")")
+        end
+
     end
 
     # Parse observations
