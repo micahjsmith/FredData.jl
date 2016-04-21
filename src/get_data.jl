@@ -18,13 +18,13 @@ Request one series using the FRED API.
 - `realtime_end`: the end of the real-time period as YYYY-MM-DD string
 - `limit`: maximum number of results to return
 - `offset`: non-negative integer
-- `sort_order`: `"asc"`, `"desc`"
+- `sort_order`: `"asc"`, `"desc"`
 - `observation_start`: the start of the observation period as YYYY-MM-DD string
 - `observation_end`: the end of the observation period as YYYY-MM-DD string
 - `units`: one of `"lin"`, `"chg"`, `"ch1"`, `"pch"`, `"pc1"`, `"pca"`, `"cch"`, `"cca"`,
   `"log"`
 - `frequency`: one of `"d"`, `"w"`, `"bw"`, `"m"`, `"q"`, `"sa"`, `"a"`, `"wef"`,
-  `"weth"`, `"wew"`, `"wetu"`, `"wem"`, `"wesu"`, `"wesa"`, `"bwew"`, `"bwem`"
+  `"weth"`, `"wew"`, `"wetu"`, `"wem"`, `"wesu"`, `"wesa"`, `"bwew"`, `"bwem"`
 - `aggregation_method`: one of `"avg"`, `"sum"`, `"eop"`
 - `output_type`: one of `1` (obsevations by real-time period), `2` (observations by vintage
   date, all observations), `3` (observations by vintage date, new and revised observations
