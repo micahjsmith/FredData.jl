@@ -114,3 +114,4 @@ Todo list:
 ☐ improve test coverage  
 ☐ support creation of pseudo-vintages  
 ☐ support methods to query other parts of the API, such as releases, tags, and search  
+☐ improve some API elements to be more idiomatic
