@@ -1,4 +1,6 @@
 # FredData
+[![FredData](http://pkg.julialang.org/badges/FredData_0.4.svg)](http://pkg.julialang.org/?pkg=FredData)
+[![FredData](http://pkg.julialang.org/badges/FredData_0.5.svg)](http://pkg.julialang.org/?pkg=FredData)
 [![Build Status](https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master)](https://travis-ci.org/micahjsmith/FredData.jl)
 
 A third-party Julia library to pull data from
