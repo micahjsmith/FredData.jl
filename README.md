@@ -102,7 +102,8 @@ Get fields.
 - `freq(s::FredSeries)`: *Native* frequency
 - `realtime_start(s::FredSeries)`: Date realtime period starts
 - `realtime_end(s::FredSeries)`: Date realtime period ends
-- `last_updated(s::FredSeries)`: Date series last updated
+- `last_updated(s::FredSeries)`: Date series last updated (adjusted to downloader's local
+    time zone)
 - `notes(s::FredSeries)`: Series notes
 - `trans_short(s::FredSeries)`: Transformation of queried data (abbr.)
 - `df(s::FredSeries)`: The actual data; DataFrame with columns `:realtime_start`,

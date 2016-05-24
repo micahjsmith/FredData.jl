@@ -4,23 +4,25 @@ module FredData
 
 using Requests
 using DataFrames
+using TimeZones
 import Requests: get
 import JSON
 
-export
+export 
        # Fred object
        Fred, get_api_url, set_api_url!, get_api_key,
 
        # FredSeries object
        FredSeries, id, title, units_short, units, seas_adj_short, seas_adj, freq_short,
        freq, realtime_start, realtime_end, last_updated, notes, trans_short, df,
-
+    
        # Download data
        get_data
 
 const MAX_ATTEMPTS       = 3
 const FIRST_REALTIME     = Date(1776,07,04)
 const LAST_REALTIME      = Date(9999,12,31)
+const FRED_TIME_ZONE     = TimeZone("America/Chicago")
 const EARLY_VINTAGE_DATE = "1991-01-01"
 const DEFAULT_API_URL    = "https://api.stlouisfed.org/fred/"
 const API_KEY_LENGTH     = 32

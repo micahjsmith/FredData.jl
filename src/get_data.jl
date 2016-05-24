@@ -92,10 +92,17 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
         end
     end
 
-    # the last three chars are -05, for CST in St. Louis
-    tmp = metadata_json["seriess"][1]["last_updated"]
-    zone = tmp[end-2:end]
-    last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")
+    # The time returned has last three characters with time zone information for FRED
+    # servers in St. Louis. Convert the date from a St. Louis DateTime to a DateTime in the
+    # local time zone.
+    tmp      = metadata_json["seriess"][1]["last_updated"]
+    println(tmp)
+    dt_str   = tmp[1:end-3]
+    zone_str = tmp[end-2:end] # unused
+    fred_last_updated = ZonedDateTime(DateTime(dt_str, "yyyy-mm-dd HH:MM:SS"),
+                                      FRED_TIME_ZONE)
+    local_last_updated = ZonedDateTime(fred_last_updated, localzone())
+    last_updated = DateTime(local_last_updated)
 
     return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
                       metadata_parsed[:units_short], metadata_parsed[:units],
