@@ -96,7 +96,6 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     # servers in St. Louis. Convert the date from a St. Louis DateTime to a DateTime in the
     # local time zone.
     tmp      = metadata_json["seriess"][1]["last_updated"]
-    println(tmp)
     dt_str   = tmp[1:end-3]
     zone_str = tmp[end-2:end] # unused
     fred_last_updated = ZonedDateTime(DateTime(dt_str, "yyyy-mm-dd HH:MM:SS"),
