@@ -22,7 +22,6 @@ export
 const MAX_ATTEMPTS       = 3
 const FIRST_REALTIME     = Date(1776,07,04)
 const LAST_REALTIME      = Date(9999,12,31)
-const FRED_TIME_ZONE     = TimeZone("America/Chicago")
 const EARLY_VINTAGE_DATE = "1991-01-01"
 const DEFAULT_API_URL    = "https://api.stlouisfed.org/fred/"
 const API_KEY_LENGTH     = 32

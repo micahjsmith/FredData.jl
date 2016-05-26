@@ -94,14 +94,8 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
 
     # The time returned has last three characters with time zone information for FRED
     # servers in St. Louis. Convert the date from a St. Louis DateTime to a DateTime in the
-    # local time zone.
-    tmp      = metadata_json["seriess"][1]["last_updated"]
-    dt_str   = tmp[1:end-3]
-    zone_str = tmp[end-2:end] # unused
-    fred_last_updated = ZonedDateTime(DateTime(dt_str, "yyyy-mm-dd HH:MM:SS"),
-                                      FRED_TIME_ZONE)
-    local_last_updated = ZonedDateTime(fred_last_updated, localzone())
-    last_updated = DateTime(local_last_updated)
+    # local time zone. Catch any errors in the parsing of this timestamp.
+    last_updated = parse_datetime(metadata_json["seriess"][1]["last_updated"])
 
     return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
                       metadata_parsed[:units_short], metadata_parsed[:units],
@@ -135,6 +129,19 @@ function parse_observations(obs::Vector)
     end
     return DataFrame(realtime_start=realtime_start, realtime_end=realtime_end,
                      date=date, value=value)
+end
+
+# FRED dates are yyyy-mm-dd HH:MM:SS±zz (in Central time). Convert to DateTime in local time
+# zone.
+function parse_datetime(str::AbstractString)
+    try
+        fred_datetime = ZonedDateTime(str * ":00", "yyyy-mm-dd HH:MM:SSzzzz")
+        local_datetime = ZonedDateTime(fred_datetime, localzone())
+        return DateTime(local_datetime)
+    catch err
+        warn("Unexpected date format when parsing: $str")
+        return DateTime(FIRST_REALTIME)
+    end
 end
 
 # Make sure everything is of the right format.
