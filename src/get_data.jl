@@ -33,7 +33,7 @@ Request one series using the FRED API.
 """
 function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs...)
     # Validation
-    validate_kwargs!(kwargs)
+    validate_args!(kwargs)
 
     # Setup
     metadata_url = get_api_url(f) * "series"
@@ -134,49 +134,49 @@ end
 # Make sure everything is of the right format.
 # kwargs is a vector of Tuple{Symbol, Any}.
 isyyyymmdd(x) = ismatch(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x)
-function validate_kwargs!(kwargs)
+function validate_args!(kwargs)
     d = Dict(kwargs)
 
     # dates
     for k in [:realtime_start, :realtime_end, :observation_start, :observation_end]
         if (v = pop!(d, k, nothing)) != nothing && !isyyyymmdd(v)
-                error(k, ": Invalid date format: ", v)
+                error("$k: Invalid date format: $v")
         end
     end
     # limit and offset
     for k in [:limit, :offset]
         if (v = pop!(d, k, nothing)) != nothing &&
             ( !(typeof(v) <: Number ) || typeof(v) <: Number && !(v>0) )
-                error(k, ": Invalid format: ", v)
+                error("$k: Invalid format: $v")
         end
     end
     # units
     if (v = pop!(d, :units, nothing)) != nothing &&
         v ∉ ["lin", "chg", "ch1", "pch", "pc1", "pca", "cch", "log"]
-            error(:units, ": Invalid format: ", v)
+            error("units: Invalid format: $v")
     end
     # frequency
     if (v = pop!(d, :frequency, nothing)) != nothing &&
         v ∉ ["d", "w", "bw", "m", "q", "sa", "a", "wef", "weth", "wew", "wetu", "wem",
              "wesu", "wesa", "bwew", "bwem"]
-            error(:frequency, ": Invalid format: ", v)
+            error("frequency: Invalid format: $v")
     end
     # aggregation_method
     if (v = pop!(d, :aggregation_method, nothing)) != nothing &&
         v ∉ ["avg", "sum", "eop"]
-            error(:aggregation_method, ": Invalid format: ", v)
+            error("aggregation_method: Invalid format: $v")
     end
     # output_type
     if (v = pop!(d, :output_type, nothing)) != nothing &&
         v ∉ [1, 2, 3, 4]
-            error(:output_type, ": Invalid format: ", v)
+            error("output_type: Invalid format: $v")
     end
     # vintage dates, and too early vintages
     if (v = pop!(d, :vintage_dates, nothing)) != nothing
         vds_arr = split(string(v), ",")
         vds_bad = map(x -> !isyyyymmdd(x), vds_arr)
         if any(vds_bad)
-            error(:vintage_dates, ": Invalid date format: ", vds_arr[vds_bad])
+            error("vintage_dates: Invalid date format: $(vds_arr[vds_bad])")
         end
         vds_early = map(x -> x<EARLY_VINTAGE_DATE, vds_arr)
         if any(vds_early)
