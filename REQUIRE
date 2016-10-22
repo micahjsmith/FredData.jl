@@ -2,4 +2,4 @@ julia 0.4
 DataFrames
 JSON
 Requests
-Compat v0.7.9
+Compat 0.7.9
