@@ -85,9 +85,9 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     for k in ["id", "title", "units_short", "units", "seasonal_adjustment_short",
         "seasonal_adjustment", "frequency_short", "frequency", "notes"]
         try
-            metadata_parsed[symbol(k)] = metadata_json["seriess"][1][k]
+            @compat metadata_parsed[Symbol(k)] = metadata_json["seriess"][1][k]
         catch err
-            metadata_parsed[symbol(k)] = ""
+            @compat metadata_parsed[Symbol(k)] = ""
             warn("Metadata '$k' not returned from server.")
         end
     end

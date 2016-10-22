@@ -2,6 +2,7 @@ isdefined(Base, :__precompile__) && __precompile__()
 
 module FredData
 
+using Compat
 using Requests
 using DataFrames
 import Requests: get
@@ -56,7 +57,7 @@ function Fred()
         key = ENV[KEY_ENV_NAME]
     elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
         open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
-            key = readall(file)
+            @compat key = readstring(file)
         end
         key = rstrip(key)
     else
