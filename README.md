@@ -3,6 +3,7 @@
 [![FredData](http://pkg.julialang.org/badges/FredData_0.5.svg)](http://pkg.julialang.org/?pkg=FredData)
 [![Build Status](https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master)](https://travis-ci.org/micahjsmith/FredData.jl)
 
+
 A third-party Julia library to pull data from
 [Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/)
 (FRED) using their [Developer API](https://research.stlouisfed.org/docs/api/).
@@ -46,7 +47,7 @@ automatically. This will allow the use of the zero-argument constructor.
     shell> setx FRED_API_KEY abcdefghijklmnopqrstuvwxyz123456
     ```
 
-Another option, though less user-friendly, is to provide your API key to the constructor
+ Another option, though less user-friendly, is to provide your API key to the constructor
 every time you wish to use the package.
 
 3. Provide the `Fred` constructor with your API key directly.
