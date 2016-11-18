@@ -12,6 +12,7 @@ in order to pull from the FRED servers.
 
 ## Disclaimer
 
+
 *FredData* is not affiliated in any way with Federal Reserve Bank of St. Louis and is not
 officially maintained or otherwise supported by Federal Reserve Bank of St. Louis.
 
@@ -40,7 +41,7 @@ automatically. This will allow the use of the zero-argument constructor.
 
     ```julia
     # on macOS/Linux
-    shell> export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456 >> ~/.bashrc
+    shell> echo "export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456" >> ~/.bashrc
 
     # on Windows 7+
     shell> setx FRED_API_KEY abcdefghijklmnopqrstuvwxyz123456
