@@ -19,22 +19,43 @@ officially maintained or otherwise supported by Federal Reserve Bank of St. Loui
 
 ## Setup
 
-Simply run
+Download the package with
 ```julia
 julia> Pkg.add("FredData")
 ```
 
-Now, register your FRED API key and make it accessible to *FredData* in one of two ways:
+Now, register your FRED API key and make it accessible to *FredData* in one of several ways.
+Ideally, we store your key such that it persists across sessions. In subsequent sections,
+we'll assume that you *have* stored your key in one of these ways such that it can be detected
+automatically. This will allow the use of the zero-argument constructor.
 
-1. Populate the environment variable `FRED_API_KEY`.
+1. Populate a configuration file `~/.freddatarc`.
 
-    ```bash
-    export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456
+    ```julia
+    julia> open(joinpath(homedir(), ".freddatarc"), "w") do f
+               write(f, "abcdefghijklmnopqrstuvwxyz123456")
+           end
     ```
-2. Populate a configuration file `~/.freddatarc`.
+2. Populate the environment variable `FRED_API_KEY` such that it remains across sessions.
 
-    ```bash
-    echo abcdefghijklmnopqrstuvwxyz123456 > ~/.freddatarc
+    ```julia
+    # on macOS/Linux
+    shell> export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456 >> ~/.bashrc
+
+    # on Windows 7+
+    shell> setx FRED_API_KEY abcdefghijklmnopqrstuvwxyz123456
+    ```
+
+Another option, though less user-friendly, is to provide your API key to the constructor
+every time you wish to use the package.
+
+3. Provide the `Fred` constructor with your API key directly.
+
+    ```julia
+    julia> f = Fred("abcdefghijklmnopqrstuvwxyz123456")
+    FRED API Connection
+            url: https://api.stlouisfed.org/fred/
+            key: abcdefghijklmnopqrstuvwxyz123456
     ```
 
 ## Usage
