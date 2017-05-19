@@ -1,14 +1,13 @@
 # FredData
-[![FredData](http://pkg.julialang.org/badges/FredData_0.4.svg)](http://pkg.julialang.org/?pkg=FredData)
-[![FredData](http://pkg.julialang.org/badges/FredData_0.5.svg)](http://pkg.julialang.org/?pkg=FredData)
-[![Build Status](https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master)](https://travis-ci.org/micahjsmith/FredData.jl)
 
 A third-party Julia library to pull data from
-[Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/)
-(FRED) using their [Developer API](https://research.stlouisfed.org/docs/api/).
+[Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/) (FRED).
 
-You must register an API key [here](https://research.stlouisfed.org/docs/api/api_key.html)
-in order to pull from the FRED servers.
+|                         | Does this thing work?                                             |
+| ----------------------- | :---------------------------------------------------------------- |
+| **Documentation**       | \<this page, for now\>                                            |
+| **Package Evaluator**   | [![][pkg-0.4-img]][pkg-0.4-url] [![][pkg-0.5-img]][pkg-0.5-url]   |
+| **Build Status**        | [![][travis-img]][travis-url] [![][appveyor-img]][appveyor-url]   |
 
 ## Disclaimer
 
@@ -20,31 +19,35 @@ officially maintained or otherwise supported by Federal Reserve Bank of St. Loui
 
 ## Setup
 
+*FredData* uses FRED's [Developer API](https://research.stlouisfed.org/docs/api/). As such, 
+you must register an API key [here](https://research.stlouisfed.org/docs/api/api_key.html)
+in order to pull from the FRED servers.
+
 Download the package with
 ```julia
 julia> Pkg.add("FredData")
 ```
 
-Now, register your FRED API key and make it accessible to *FredData* in one of several ways.
-Ideally, we store your key such that it persists across sessions. In subsequent sections,
-we'll assume that you *have* stored your key in one of these ways such that it can be detected
-automatically. This will allow the use of the zero-argument constructor.
+Make the FRED API key that you just registered accessible to *FredData* in one of several
+ways. Ideally, we store your key such that it persists across sessions. In subsequent
+sections, we'll assume that you *have* stored your key in one of these ways such that it can
+be detected automatically. This will allow the use of the zero-argument constructor.
 
 1. Populate a configuration file `~/.freddatarc`.
 
     ```julia
     julia> open(joinpath(homedir(), ".freddatarc"), "w") do f
-               write(f, "abcdefghijklmnopqrstuvwxyz123456")
+               write(f, "0123456789abcdef0123456789abcdef")
            end
     ```
 2. Populate the environment variable `FRED_API_KEY` such that it remains across sessions.
 
     ```julia
     # on macOS/Linux
-    shell> echo "export FRED_API_KEY=abcdefghijklmnopqrstuvwxyz123456" >> ~/.bashrc
+    shell> echo "export FRED_API_KEY=0123456789abcdef0123456789abcdef" >> ~/.bashrc
 
     # on Windows 7+
-    shell> setx FRED_API_KEY abcdefghijklmnopqrstuvwxyz123456
+    shell> setx FRED_API_KEY 0123456789abcdef0123456789abcdef
     ```
 
 Another option, though less user-friendly, is to provide your API key to the constructor
@@ -53,10 +56,10 @@ every time you wish to use the package.
 3. Provide the `Fred` constructor with your API key directly.
 
     ```julia
-    julia> f = Fred("abcdefghijklmnopqrstuvwxyz123456")
+    julia> f = Fred("0123456789abcdef0123456789abcdef")
     FRED API Connection
             url: https://api.stlouisfed.org/fred/
-            key: abcdefghijklmnopqrstuvwxyz123456
+            key: 0123456789abcdef0123456789abcdef
     ```
 
 ## Usage
@@ -64,14 +67,14 @@ every time you wish to use the package.
 ### Basic Usage
 
 Query observations and metadata.
-```
+```julia
 julia> using FredData
 
 julia> f = Fred()
 API key loaded.
 FRED API Connection
         url: http://api.stlouisfed.org/fred/
-        key: abcdefghijklmnopqrstuvwxyz123456
+        key: 0123456789abcdef0123456789abcdef
 
 julia> a = get_data(f, "GDPC1")
 FredSeries
@@ -94,8 +97,8 @@ Add optional arguments. All optional arguments specified by the FRED API are sup
 ```julia
 using FredData
 f = Fred()
-b = get_data(f, "GDPC1"; vintage_dates="2008-09-15")
-c = get_data(f, "GDPC1"; frequency="a", units="chg")
+data = get_data(f, "GDPC1"; vintage_dates="2008-09-15")
+data = get_data(f, "GDPC1"; frequency="a", units="chg")
 ```
 
 For a full list of optional arguments, see `?get_data` or
@@ -139,3 +142,12 @@ Todo list:
 ☐ support creation of pseudo-vintages  
 ☐ support methods to query other parts of the API, such as releases, tags, and search  
 ☐ improve some API elements to be more idiomatic
+
+[pkg-0.4-img]: http://pkg.julialang.org/badges/FredData_0.4.svg
+[pkg-0.4-url]: http://pkg.julialang.org/?pkg=FredData
+[pkg-0.5-img]: http://pkg.julialang.org/badges/FredData_0.5.svg
+[pkg-0.5-url]: http://pkg.julialang.org/?pkg=FredData
+[travis-img]: https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master
+[travis-url]: https://travis-ci.org/micahjsmith/FredData.jl
+[appveyor-img]: https://ci.appveyor.com/api/projects/status/qmrotjcadtruev03/branch/master?svg=true
+[appveyor-url]: https://ci.appveyor.com/project/micahjsmith/freddata-jl
