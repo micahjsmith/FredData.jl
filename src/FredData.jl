@@ -73,7 +73,7 @@ function Fred()
     elseif length(key) < API_KEY_LENGTH
         error("Invalid FRED API key: ", key, ". Key too short.")
     end
-    if !isxdigit(key)
+    if !all(isxdigit, key)
         error("Invalid FRED API key: ", key, ". Invalid characters.")
     end
 
