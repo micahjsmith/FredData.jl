@@ -97,6 +97,12 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     zone = tmp[end-2:end]
     last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")
 
+    # format notes field
+    metadata_parsed[:notes] = (metadata_parsed[:notes]
+                               |> replace(r"[\r\n]", " ")
+                               |> replace(r" +", " ")
+                               |> strip)
+
     return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
                       metadata_parsed[:units_short], metadata_parsed[:units],
                       metadata_parsed[:seasonal_adjustment_short],

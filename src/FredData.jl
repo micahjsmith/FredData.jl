@@ -131,42 +131,42 @@ immutable FredSeries
 
     # From series/observations query
     trans_short::AbstractString # "units"
-    df::DataFrames.DataFrame
+    data::DataFrames.DataFrame
 end
-id(f::FredSeries) = f.id
-title(f::FredSeries) = f.title
-units_short(f::FredSeries) = f.units_short
-units(f::FredSeries) = f.units
-seas_adj_short(f::FredSeries) = f.seas_adj_short
-seas_adj(f::FredSeries) = f.seas_adj
-freq_short(f::FredSeries) = f.freq_short
-freq(f::FredSeries) = f.freq
-realtime_start(f::FredSeries) = f.realtime_start
-realtime_end(f::FredSeries) = f.realtime_end
-last_updated(f::FredSeries) = f.last_updated
-function notes(f::FredSeries)
-    str = f.notes
-    str = replace(str, r"[\r\n]", " ")
-    str = replace(str, r" +", " ")
-    str = strip(str)
-    return str
-end
-trans_short(f::FredSeries) = f.trans_short
-df(f::FredSeries) = f.df
+
+# deprecated
+export
+    id, title, units_short, units, seas_adj_short, seas_adj, freq_short,
+    freq, realtime_start, realtime_end, last_updated, notes, trans_short,
+    df
+@deprecate id(f::FredSeries) getfield(f, :id)
+@deprecate title(f::FredSeries) getfield(f, :title)
+@deprecate units_short(f::FredSeries) getfield(f, :units_short)
+@deprecate units(f::FredSeries) getfield(f, :units)
+@deprecate seas_adj_short(f::FredSeries) getfield(f, :seas_adj_short)
+@deprecate seas_adj(f::FredSeries) getfield(f, :seas_adj)
+@deprecate freq_short(f::FredSeries) getfield(f, :freq_short)
+@deprecate freq(f::FredSeries) getfield(f, :freq)
+@deprecate realtime_start(f::FredSeries) getfield(f, :realtime_start)
+@deprecate realtime_end(f::FredSeries) getfield(f, :realtime_end)
+@deprecate last_updated(f::FredSeries) getfield(f, :last_updated)
+@deprecate notes(f::FredSeries) getfield(f, :notes)
+@deprecate trans_short(f::FredSeries) getfield(f, :trans_short)
+@deprecate df(f::FredSeries) getfield(f, :data)
 
 function Base.show(io::IO, s::FredSeries)
     @printf io "FredSeries\n"
-    @printf io "\tid: %s\n"                id(s)
-    @printf io "\ttitle: %s\n"             title(s)
-    @printf io "\tunits: %s\n"             units(s)
-    @printf io "\tseas_adj (native): %s\n" seas_adj(s)
-    @printf io "\tfreq (native): %s\n"     freq(s)
-    @printf io "\trealtime_start: %s\n"    realtime_start(s)
-    @printf io "\trealtime_end: %s\n"      realtime_end(s)
-    @printf io "\tlast_updated: %s\n"      last_updated(s)
-    @printf io "\tnotes: %s\n"             notes(s)
-    @printf io "\ttrans_short: %s\n"       trans_short(s)
-    @printf io "\tdf: %dx%d DataFrame with columns %s\n" size(df(s))... names(df(s))
+    @printf io "\tid: %s\n"                s.id
+    @printf io "\ttitle: %s\n"             s.title
+    @printf io "\tunits: %s\n"             s.units
+    @printf io "\tseas_adj (native): %s\n" s.seas_adj
+    @printf io "\tfreq (native): %s\n"     s.freq
+    @printf io "\trealtime_start: %s\n"    s.realtime_start
+    @printf io "\trealtime_end: %s\n"      s.realtime_end
+    @printf io "\tlast_updated: %s\n"      s.last_updated
+    @printf io "\tnotes: %s\n"             s.notes
+    @printf io "\ttrans_short: %s\n"       s.trans_short
+    @printf io "\tdata: %dx%d DataFrame with columns %s\n" size(s.data)... names(s.data)
 end
 
 include("get_data.jl")
