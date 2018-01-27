@@ -3,11 +3,11 @@
 A third-party Julia library to pull data from
 [Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/) (FRED).
 
-|                         | Does this thing work?                                             |
-| ----------------------- | :---------------------------------------------------------------- |
-| **Documentation**       | \<this page, for now\>                                            |
-| **Package Evaluator**   | [![][pkg-0.4-img]][pkg-0.4-url] [![][pkg-0.5-img]][pkg-0.5-url]   |
-| **Build Status**        | [![][travis-img]][travis-url] [![][appveyor-img]][appveyor-url]   |
+|                         | Does this thing work?                                           |
+| ----------------------- | :-------------------------------------------------------------- |
+| **Documentation**       | \<this page, for now\>                                          |
+| **Package Evaluator**   | [![][pkg-0.5-img]][pkg-0.5-url] [![][pkg-0.6-img]][pkg-0.6-url] |
+| **Build Status**        | [![][travis-img]][travis-url] [![][appveyor-img]][appveyor-url] |
 
 ## Disclaimer
 
@@ -147,6 +147,10 @@ Todo list:
 [pkg-0.4-url]: http://pkg.julialang.org/?pkg=FredData
 [pkg-0.5-img]: http://pkg.julialang.org/badges/FredData_0.5.svg
 [pkg-0.5-url]: http://pkg.julialang.org/?pkg=FredData
+[pkg-0.6-img]: http://pkg.julialang.org/badges/FredData_0.6.svg
+[pkg-0.6-url]: http://pkg.julialang.org/?pkg=FredData
+[pkg-0.7-img]: http://pkg.julialang.org/badges/FredData_0.7.svg
+[pkg-0.7-url]: http://pkg.julialang.org/?pkg=FredData
 [travis-img]: https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master
 [travis-url]: https://travis-ci.org/micahjsmith/FredData.jl
 [appveyor-img]: https://ci.appveyor.com/api/projects/status/qmrotjcadtruev03/branch/master?svg=true
