@@ -37,7 +37,7 @@ Constructors
 ------------
 - `Fred()`: Key detected automatically. First, looks for the environment variable
     FRED_API_KEY, then looks for the file ~/.freddatarc.
-- `Fred(key::AbstractString)`: User specifies key
+- `Fred(key::AbstractString)`: User specifies key directly
 
 Arguments
 ---------
@@ -96,23 +96,23 @@ end
 FredSeries(...)
 ```
 
-Represent a single data series, and all associated metadata, return from Fred.
+Represent a single data series, and all associated metadata, as queried from FRED.
 
-### Field access
-- `id(f)`
-- `title(f)`
-- `units_short(f)`
-- `units(f)`
-- `seas_adj_short(f)`
-- `seas_adj(f)`
-- `freq_short(f)`
-- `freq(f)`
-- `realtime_start(f)`
-- `realtime_end(f)`
-- `last_updated(f)`
-- `notes(f)`
-- `trans_short(f)`
-- `df(f)`
+The following fields are available:
+- `id`
+- `title`
+- `units_short`
+- `units`
+- `seas_adj_short`
+- `seas_adj`
+- `freq_short`
+- `freq`
+- `realtime_start`
+- `realtime_end`
+- `last_updated`
+- `notes`
+- `trans_short`
+- `data`
 
 """
 immutable FredSeries
@@ -135,7 +135,22 @@ immutable FredSeries
     data::DataFrames.DataFrame
 end
 
-# deprecated
+function Base.show(io::IO, s::FredSeries)
+    @printf io "FredSeries\n"
+    @printf io "\tid: %s\n"                s.id
+    @printf io "\ttitle: %s\n"             s.title
+    @printf io "\tunits: %s\n"             s.units
+    @printf io "\tseas_adj (native): %s\n" s.seas_adj
+    @printf io "\tfreq (native): %s\n"     s.freq
+    @printf io "\trealtime_start: %s\n"    s.realtime_start
+    @printf io "\trealtime_end: %s\n"      s.realtime_end
+    @printf io "\tlast_updated: %s\n"      s.last_updated
+    @printf io "\tnotes: %s\n"             s.notes
+    @printf io "\ttrans_short: %s\n"       s.trans_short
+    @printf io "\tdata: %dx%d DataFrame with columns %s\n" size(s.data)... names(s.data)
+end
+
+# old, deprecated accessors
 export
     id, title, units_short, units, seas_adj_short, seas_adj, freq_short,
     freq, realtime_start, realtime_end, last_updated, notes, trans_short,
@@ -154,21 +169,6 @@ export
 @deprecate notes(f::FredSeries) getfield(f, :notes)
 @deprecate trans_short(f::FredSeries) getfield(f, :trans_short)
 @deprecate df(f::FredSeries) getfield(f, :data)
-
-function Base.show(io::IO, s::FredSeries)
-    @printf io "FredSeries\n"
-    @printf io "\tid: %s\n"                s.id
-    @printf io "\ttitle: %s\n"             s.title
-    @printf io "\tunits: %s\n"             s.units
-    @printf io "\tseas_adj (native): %s\n" s.seas_adj
-    @printf io "\tfreq (native): %s\n"     s.freq
-    @printf io "\trealtime_start: %s\n"    s.realtime_start
-    @printf io "\trealtime_end: %s\n"      s.realtime_end
-    @printf io "\tlast_updated: %s\n"      s.last_updated
-    @printf io "\tnotes: %s\n"             s.notes
-    @printf io "\ttrans_short: %s\n"       s.trans_short
-    @printf io "\tdata: %dx%d DataFrame with columns %s\n" size(s.data)... names(s.data)
-end
 
 include("get_data.jl")
 

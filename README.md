@@ -50,8 +50,8 @@ be detected automatically. This will allow the use of the zero-argument construc
     shell> setx FRED_API_KEY 0123456789abcdef0123456789abcdef
     ```
 
-Another option, though less user-friendly, is to provide your API key to the constructor
-every time you wish to use the package.
+Another option is to provide your API key to the constructor every time you wish to use the
+package.
 
 3. Provide the `Fred` constructor with your API key directly.
 
@@ -88,7 +88,7 @@ FredSeries
         last_updated: 2015-11-24T08:01:09
         notes: BEA Account Code: A191RX1 Real gross domestic product is the inflation adjusted value of the goods and services produced by labor and property located in the United States. For more information see the Guide to the National Income and Product Accounts of the United States (NIPA) - (http://www.bea.gov/national/pdf/nipaguid.pdf)
         trans_short: lin
-        df: 275x4 DataFrame with columns [:realtime_start,:realtime_end,:date,:value]
+        data: 275x4 DataFrame with columns [:realtime_start,:realtime_end,:date,:value]
 ```
 
 ### Advanced Usage
@@ -119,20 +119,20 @@ Get and set fields.
 The `FredSeries` type contains the data in a query response.
 
 Get fields.
-- `id(s::FredSeries)`: Series ID
-- `title(s::FredSeries)`: Series title
-- `units_short(s::FredSeries)`: Units (abbr.)
-- `units(s::FredSeries)`: Units
-- `seas_adj_short(s::FredSeries)`: Seasonal adjustment (abbr.)
-- `seas_adj(s::FredSeries)`: Seasonal adjustment
-- `freq_short(s::FredSeries)`: *Native* frequency (abbr.)
-- `freq(s::FredSeries)`: *Native* frequency
-- `realtime_start(s::FredSeries)`: Date realtime period starts
-- `realtime_end(s::FredSeries)`: Date realtime period ends
-- `last_updated(s::FredSeries)`: Date series last updated
-- `notes(s::FredSeries)`: Series notes
-- `trans_short(s::FredSeries)`: Transformation of queried data (abbr.)
-- `df(s::FredSeries)`: The actual data; DataFrame with columns `:realtime_start`,
+- `s.id`: Series ID
+- `title`: Series title
+- `units_short`: Units (abbr.)
+- `units`: Units
+- `seas_adj_short`: Seasonal adjustment (abbr.)
+- `seas_adj`: Seasonal adjustment
+- `freq_short`: *Native* frequency (abbr.)
+- `freq`: *Native* frequency
+- `realtime_start`: Date realtime period starts
+- `realtime_end`: Date realtime period ends
+- `last_updated`: Date series last updated
+- `notes`: Series notes
+- `trans_short`: Transformation of queried data (abbr.)
+- `data`: The actual data; DataFrame with columns `:realtime_start`,
   `:realtime_end`, `:date`, `:value`
 
 ## Notes
@@ -141,7 +141,6 @@ Todo list:
 ☐ improve test coverage  
 ☐ support creation of pseudo-vintages  
 ☐ support methods to query other parts of the API, such as releases, tags, and search  
-☐ improve some API elements to be more idiomatic
 
 [pkg-0.4-img]: http://pkg.julialang.org/badges/FredData_0.4.svg
 [pkg-0.4-url]: http://pkg.julialang.org/?pkg=FredData
