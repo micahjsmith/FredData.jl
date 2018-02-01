@@ -111,7 +111,8 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
                       metadata_parsed[:seasonal_adjustment],
                       metadata_parsed[:frequency_short], metadata_parsed[:frequency],
                       realtime_start, realtime_end, last_updated, metadata_parsed[:notes],
-                      transformation_short, df)
+                      transformation_short, df,
+                      df) # deprecated
 end
 
 # obs is a vector, of which each element is a dict with four fields,

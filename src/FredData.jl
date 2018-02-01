@@ -133,6 +133,9 @@ immutable FredSeries
     # From series/observations query
     trans_short::AbstractString # "units"
     data::DataFrames.DataFrame
+
+    # deprecated
+    df::DataFrames.DataFrame
 end
 
 function Base.show(io::IO, s::FredSeries)
