@@ -3,7 +3,6 @@ isdefined(Base, :__precompile__) && __precompile__()
 module FredData
 
 using Compat
-using Lazy
 using Requests
 using DataFrames
 import Requests: get

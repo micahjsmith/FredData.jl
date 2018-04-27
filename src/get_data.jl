@@ -98,12 +98,8 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")
 
     # format notes field
-    metadata_parsed[:notes] = 
-        @> metadata_parsed[:notes] begin
-            replace(r"[\r\n]", " ")
-            replace(r" +", " ")
-            strip
-        end
+    metadata_parsed[:notes] = strip(replace(replace(
+        metadata_parse[:notes], r"[\r\n]", " "), r" +", " "))
 
     return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
                       metadata_parsed[:units_short], metadata_parsed[:units],
