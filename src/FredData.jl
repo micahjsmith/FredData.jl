@@ -69,7 +69,7 @@ function Fred()
         ENV[KEY_ENV_NAME]
     elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
         key = open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
-            @compat readstring(file)
+            @compat read(file, String)
         end
         rstrip(key)
     else
