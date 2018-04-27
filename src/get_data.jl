@@ -61,7 +61,7 @@ function get_data(f::Fred, series::AbstractString;
         # If error 500 (Internal Server Error), we can retry our request. Otherwise, give
         # up.
         if obs_json["error_code"] == 500 && retries > 0
-            return get_data(f, series; retries=retries-1, kwargs)
+            return get_data(f, series; retries=retries-1, kwargs...)
         else
             error(series, ": ", obs_json["error_message"], " (", obs_json["error_code"],")")
         end
