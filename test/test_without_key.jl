@@ -56,7 +56,6 @@ end
 @testset "Client creation fails with invalid/missing key" begin
     bad_key_short = repeat("c",
                            convert(Int, round(FredData.API_KEY_LENGTH/2)))
-    println(bad_key_short)
     @test_throws Exception Fred(bad_key_short)
 
     # no key anywhere

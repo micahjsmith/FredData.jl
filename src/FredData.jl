@@ -52,7 +52,6 @@ type Fred
     url::AbstractString
 end
 function Fred(key::AbstractString)
-    println("length of key is: ", length(key))
     # Key validation
     if length(key) > API_KEY_LENGTH
         key = key[1:API_KEY_LENGTH]
