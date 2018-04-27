@@ -3,11 +3,11 @@ isdefined(Base, :__precompile__) && __precompile__()
 module FredData
 
 using Compat
-using Requests
 using Compat.Dates
 using Compat.Printf
 using DataFrames
-import Requests: get
+
+import HTTP.request
 import JSON
 
 export

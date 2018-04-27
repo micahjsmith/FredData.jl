@@ -51,8 +51,8 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     for (i,j) in kwargs
         query_obs[string(i)] = string(j)
     end
-    obs = get(obs_url; query=query_obs)
-    obs_json = Requests.json(obs)
+    response_obs = HTTP.request("GET", obs_url, query_obs)
+    obs_json = JSON.json(string(response_obs))
 
     # Confirm request okay
     if haskey(obs_json, "error_code")
@@ -77,8 +77,8 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     # Query metadata
     query_metadata["realtime_start"] = realtime_start
     query_metadata["realtime_end"] = realtime_end
-    metadata = get(metadata_url; query=query_metadata)
-    metadata_json = Requests.json(metadata)
+    metadata_response = HTTP.request("GET", metadata_url, query_metadata)
+    metadata_json = JSON.json(string(metadata_response))
 
     # Parse metadata
     metadata_parsed = Dict{Symbol, AbstractString}()
