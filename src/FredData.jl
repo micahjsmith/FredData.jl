@@ -51,22 +51,8 @@ type Fred
     key::AbstractString
     url::AbstractString
 end
-Fred(key) =  Fred(key, DEFAULT_API_URL)
-function Fred()
-    key = ""
-    if KEY_ENV_NAME in keys(ENV)
-        key = ENV[KEY_ENV_NAME]
-    elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
-        open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
-            @compat key = readstring(file)
-        end
-        key = rstrip(key)
-    else
-        error("FRED API Key not detected.")
-    end
-
-    @printf "API key loaded.\n"
-
+function Fred(key::AbstractString)
+    println("length of key is: ", length(key))
     # Key validation
     if length(key) > API_KEY_LENGTH
         key = key[1:API_KEY_LENGTH]
@@ -77,7 +63,21 @@ function Fred()
     if !all(isxdigit, key)
         error("Invalid FRED API key: ", key, ". Invalid characters.")
     end
+    return Fred(key, DEFAULT_API_URL)
+end
+function Fred()
+    key = if KEY_ENV_NAME in keys(ENV)
+        ENV[KEY_ENV_NAME]
+    elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
+        key = open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
+            @compat readstring(file)
+        end
+        rstrip(key)
+    else
+        error("FRED API Key not detected.")
+    end
 
+    @printf "API key loaded.\n"
     return Fred(key)
 end
 get_api_key(f::Fred) = f.key
