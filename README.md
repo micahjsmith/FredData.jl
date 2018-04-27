@@ -19,7 +19,7 @@ officially maintained or otherwise supported by Federal Reserve Bank of St. Loui
 
 ## Setup
 
-*FredData* uses FRED's [Developer API](https://research.stlouisfed.org/docs/api/). As such, 
+*FredData* uses FRED's [Developer API](https://research.stlouisfed.org/docs/api/). As such,
 you must register an API key [here](https://research.stlouisfed.org/docs/api/api_key.html)
 in order to pull from the FRED servers.
 
@@ -118,21 +118,21 @@ Get and set fields.
 
 The `FredSeries` type contains the data in a query response.
 
-Get fields.
+Get fields of a series `s`:
 - `s.id`: Series ID
-- `title`: Series title
-- `units_short`: Units (abbr.)
-- `units`: Units
-- `seas_adj_short`: Seasonal adjustment (abbr.)
-- `seas_adj`: Seasonal adjustment
-- `freq_short`: *Native* frequency (abbr.)
-- `freq`: *Native* frequency
-- `realtime_start`: Date realtime period starts
-- `realtime_end`: Date realtime period ends
-- `last_updated`: Date series last updated
-- `notes`: Series notes
-- `trans_short`: Transformation of queried data (abbr.)
-- `data`: The actual data; DataFrame with columns `:realtime_start`,
+- `s.title`: Series title
+- `s.units_short`: Units (abbr.)
+- `s.units`: Units
+- `s.seas_adj_short`: Seasonal adjustment (abbr.)
+- `s.seas_adj`: Seasonal adjustment
+- `s.freq_short`: *Native* frequency (abbr.)
+- `s.freq`: *Native* frequency
+- `s.realtime_start`: Date realtime period starts
+- `s.realtime_end`: Date realtime period ends
+- `s.last_updated`: Date series last updated
+- `s.notes`: Series notes
+- `s.trans_short`: Transformation of queried data (abbr.)
+- `s.data`: The actual data; DataFrame with columns `:realtime_start`,
   `:realtime_end`, `:date`, `:value`
 
 ## Notes

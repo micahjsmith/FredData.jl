@@ -15,7 +15,10 @@ export
        Fred, get_api_url, set_api_url!, get_api_key,
 
        # FredSeries object
-       FredSeries, id, title, units_short, units, seas_adj_short, seas_adj, freq_short,
+       FredSeries,
+
+       # deprecated getters
+       id, title, units_short, units, seas_adj_short, seas_adj, freq_short,
        freq, realtime_start, realtime_end, last_updated, notes, trans_short, df,
 
        # Download data

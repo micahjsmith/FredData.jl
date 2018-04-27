@@ -31,7 +31,8 @@ Request one series using the FRED API.
   only), `4` (observations, initial release only)
 - `vintage_dates`: vintage dates as comma-separated YYYY-MM-DD strings
 """
-function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs...)
+function get_data(f::Fred, series::AbstractString;
+                  retries=MAX_ATTEMPTS, kwargs...)
     # Validation
     validate_args!(kwargs)
 
@@ -84,18 +85,22 @@ function get_data(f::Fred, series::AbstractString; retries=MAX_ATTEMPTS, kwargs.
     metadata_parsed = Dict{Symbol, AbstractString}()
     for k in ["id", "title", "units_short", "units", "seasonal_adjustment_short",
         "seasonal_adjustment", "frequency_short", "frequency", "notes"]
+        @compat key = Symbol(k)
         try
-            @compat metadata_parsed[Symbol(k)] = metadata_json["seriess"][1][k]
+            metadata_parsed[key] = metadata_json["seriess"][1][k]
         catch err
-            @compat metadata_parsed[Symbol(k)] = ""
+            metadata_parsed[key] = ""
             warn("Metadata '$k' not returned from server.")
         end
     end
 
     # the last three chars are -05, for CST in St. Louis
-    tmp = metadata_json["seriess"][1]["last_updated"]
-    zone = tmp[end-2:end]
-    last_updated = DateTime(tmp[1:end-3], "yyyy-mm-dd HH:MM:SS")
+    function parse_last_updated(last_updated)
+        timezone = last_updated[end-2:end]  # TODO
+        return DateTime(last_updated[1:end-3], "yyyy-mm-dd HH:MM:SS")
+    end
+    last_updated = parse_last_updated(
+        metadata_json["seriess"][1]["last_updated"])
 
     # format notes field
     metadata_parsed[:notes] = strip(replace(replace(
