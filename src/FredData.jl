@@ -17,10 +17,6 @@ export
        # FredSeries object
        FredSeries,
 
-       # deprecated getters
-       id, title, units_short, units, seas_adj_short, seas_adj, freq_short,
-       freq, realtime_start, realtime_end, last_updated, notes, trans_short, df,
-
        # Download data
        get_data
 
