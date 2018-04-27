@@ -4,6 +4,8 @@ module FredData
 
 using Compat
 using Requests
+using Compat.Dates
+using Compat.Printf
 using DataFrames
 import Requests: get
 import JSON
