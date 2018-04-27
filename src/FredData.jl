@@ -7,7 +7,7 @@ using Compat.Dates
 using Compat.Printf
 using DataFrames
 
-import HTTP.request
+import HTTP
 import JSON
 
 export
