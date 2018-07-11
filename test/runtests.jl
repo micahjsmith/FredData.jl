@@ -1,5 +1,5 @@
 using FredData
-using Base.Test
+using Test
 
 include("test_without_key.jl")
 

@@ -1,4 +1,5 @@
-isdefined(Base, :__precompile__) && __precompile__()
+__precompile__()
+
 
 module FredData
 
@@ -47,11 +48,26 @@ Notes
 -----
 - Set the API url with `set_api_url!(f::Fred, url::AbstractString)`
 """
-type Fred
+mutable struct Fred
     key::AbstractString
     url::AbstractString
 end
-function Fred(key::AbstractString)
+Fred(key) =  Fred(key, DEFAULT_API_URL)
+function Fred()
+    key = ""
+    if KEY_ENV_NAME in keys(ENV)
+        key = ENV[KEY_ENV_NAME]
+    elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
+        open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
+            key = read(file, String)
+        end
+        key = rstrip(key)
+    else
+        error("FRED API Key not detected.")
+    end
+
+    @printf "API key loaded.\n"
+
     # Key validation
     if length(key) > API_KEY_LENGTH
         key = key[1:API_KEY_LENGTH]
@@ -114,7 +130,7 @@ The following fields are available:
 - `data`
 
 """
-immutable FredSeries
+struct FredSeries
     # From series query
     id::AbstractString
     title::AbstractString

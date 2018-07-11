@@ -87,9 +87,9 @@ function get_data(f::Fred, series::AbstractString;
         "seasonal_adjustment", "frequency_short", "frequency", "notes"]
         @compat key = Symbol(k)
         try
-            metadata_parsed[key] = metadata_json["seriess"][1][k]
+            metadata_parsed[Symbol(k)] = metadata_json["seriess"][1][k]
         catch err
-            metadata_parsed[key] = ""
+            metadata_parsed[Symbol(k)] = ""
             warn("Metadata '$k' not returned from server.")
         end
     end
@@ -143,7 +143,7 @@ end
 
 # Make sure everything is of the right format.
 # kwargs is a vector of Tuple{Symbol, Any}.
-isyyyymmdd(x) = ismatch(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x)
+isyyyymmdd(x) = occursin(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", x)
 function validate_args!(kwargs)
     d = Dict(kwargs)
 
@@ -198,7 +198,7 @@ function validate_args!(kwargs)
     if length(d) > 0
         for k in keys(d)
             warn(string(k), ": Bad key. Removed from query.")
-            deleteat!(kwargs, find(x -> x[1]==k, kwargs))
+            deleteat!(kwargs, findall(x -> x[1]==k, kwargs))
         end
     end
 end

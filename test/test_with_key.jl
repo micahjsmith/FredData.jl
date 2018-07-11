@@ -1,5 +1,5 @@
 using FredData
-using Base.Test
+using Test
 
 @testset "Basic usage" begin
     f = Fred()
