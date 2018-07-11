@@ -1,5 +1,5 @@
 using FredData
-using Base.Test
+using Test
 
 # Normal usage - API key must be present in ENV
 if haskey(ENV, "FRED_API_KEY")

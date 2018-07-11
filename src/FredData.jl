@@ -1,4 +1,5 @@
-isdefined(Base, :__precompile__) && __precompile__()
+__precompile__()
+
 
 module FredData
 
@@ -47,7 +48,7 @@ Notes
 -----
 - Set the API url with `set_api_url!(f::Fred, url::AbstractString)`
 """
-type Fred
+mutable struct Fred
     key::AbstractString
     url::AbstractString
 end
@@ -58,7 +59,7 @@ function Fred()
         key = ENV[KEY_ENV_NAME]
     elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
         open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
-            @compat key = readstring(file)
+            key = read(file, String)
         end
         key = rstrip(key)
     else
@@ -115,7 +116,7 @@ The following fields are available:
 - `data`
 
 """
-immutable FredSeries
+struct FredSeries
     # From series query
     id::AbstractString
     title::AbstractString
