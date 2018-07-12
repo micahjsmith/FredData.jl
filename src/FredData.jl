@@ -3,11 +3,7 @@ __precompile__()
 
 module FredData
 
-using Compat
-using Compat.Dates
-using Compat.Printf
 using DataFrames
-
 import HTTP
 import JSON
 
