@@ -4,6 +4,8 @@ __precompile__()
 module FredData
 
 using DataFrames
+using Dates
+using Printf
 import HTTP
 import JSON
 
