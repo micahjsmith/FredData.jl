@@ -51,48 +51,33 @@ Notes
 mutable struct Fred
     key::AbstractString
     url::AbstractString
-end
-Fred(key) =  Fred(key, DEFAULT_API_URL)
-function Fred()
-    key = ""
-    if KEY_ENV_NAME in keys(ENV)
-        key = ENV[KEY_ENV_NAME]
-    elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
-        open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
-            key = read(file, String)
+    function Fred(key, url)
+        # Key validation
+        if length(key) > API_KEY_LENGTH
+            key = key[1:API_KEY_LENGTH]
+            warn("FRED API key too long. First $(API_KEY_LENGTH) chars used.")
+        elseif length(key) < API_KEY_LENGTH
+            error("Invalid FRED API key -- key too short: $(key)")
         end
-        key = rstrip(key)
-    else
-        error("FRED API Key not detected.")
+        if !all(isxdigit, key)
+            error("Invalid FRED API key -- invalid characters: $(key)")
+        end
+        return new(key, url)
     end
-
-    @printf "API key loaded.\n"
-
-    # Key validation
-    if length(key) > API_KEY_LENGTH
-        key = key[1:API_KEY_LENGTH]
-        warn("Key too long. First ", API_KEY_LENGTH, " chars used.")
-    elseif length(key) < API_KEY_LENGTH
-        error("Invalid FRED API key: ", key, ". Key too short.")
-    end
-    if !all(isxdigit, key)
-        error("Invalid FRED API key: ", key, ". Invalid characters.")
-    end
-    return Fred(key, DEFAULT_API_URL)
 end
+Fred(key::AbstractString) = Fred(key, DEFAULT_API_URL)
 function Fred()
     key = if KEY_ENV_NAME in keys(ENV)
         ENV[KEY_ENV_NAME]
     elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
-        key = open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
-            @compat read(file, String)
+        open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
+            rstrip(read(file, String))
         end
-        rstrip(key)
     else
         error("FRED API Key not detected.")
     end
 
-    @printf "API key loaded.\n"
+    println("API key loaded.")
     return Fred(key)
 end
 get_api_key(f::Fred) = f.key
