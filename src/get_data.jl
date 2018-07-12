@@ -88,7 +88,7 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
 
     # format notes field
     metadata_parsed[:notes] = strip(replace(replace(
-        metadata_parsed[:notes], r"[\r\n]", " "), r" +", " "))
+        metadata_parsed[:notes], r"[\r\n]" => " "), r" +" => " "))
 
     return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
                       metadata_parsed[:units_short], metadata_parsed[:units],
@@ -107,10 +107,10 @@ end
 # - value
 function parse_observations(obs::Vector)
     n_obs = length(obs)
-    value = Vector{Float64}(n_obs)
-    date  = Vector{Date}(n_obs)
-    realtime_start = Vector{Date}(n_obs)
-    realtime_end = Vector{Date}(n_obs)
+    value = Vector{Float64}(undef, n_obs)
+    date  = Vector{Date}(undef, n_obs)
+    realtime_start = Vector{Date}(undef, n_obs)
+    realtime_end = Vector{Date}(undef, n_obs)
     for (i, x) in enumerate(obs)
         try
             value[i] = parse(Float64, x["value"])
