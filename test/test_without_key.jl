@@ -1,5 +1,5 @@
 using FredData
-using Base.Test
+using Test
 
 function with_key_env(f::Function, key::AbstractString)
     withenv(FredData.KEY_ENV_NAME => key) do
