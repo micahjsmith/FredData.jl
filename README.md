@@ -6,7 +6,7 @@ A third-party Julia library to pull data from
 |                         | Does this thing work?                                           |
 | ----------------------- | :-------------------------------------------------------------- |
 | **Documentation**       | \<this page, for now\>                                          |
-| **Package Evaluator**   | [![][pkg-0.5-img]][pkg-0.5-url] [![][pkg-0.6-img]][pkg-0.6-url] |
+| **Package Evaluator**   | [![][pkg-0.5-img]][pkg-0.5-url] [![][pkg-0.6-img]][pkg-0.6-url] [![][pkg-0.7-img]][pkg-0.7-url] |
 | **Build Status**        | [![][travis-img]][travis-url] [![][appveyor-img]][appveyor-url] |
 
 ## Disclaimer
