@@ -10,8 +10,6 @@ Request one series using the FRED API.
 - `series`: series mnemonic
 
 ### Optional Arguments
-- `retries`: number of retries if server error
-
 `kwargs...`: key-value pairs to be appended to the FRED request. Accepted keys include:
 
 - `realtime_start`: the start of the real-time period as YYYY-MM-DD string
@@ -31,42 +29,28 @@ Request one series using the FRED API.
   only), `4` (observations, initial release only)
 - `vintage_dates`: vintage dates as comma-separated YYYY-MM-DD strings
 """
-function get_data(f::Fred, series::AbstractString;
-                  retries=MAX_ATTEMPTS, kwargs...)
+function get_data(f::Fred, series::AbstractString; kwargs...)
     # Validation
     validate_args!(kwargs)
 
     # Setup
     metadata_url = get_api_url(f) * "series"
     obs_url      = get_api_url(f) * "series/observations"
-    key          = get_api_key(f)
+    api_key      = get_api_key(f)
 
     # Add query parameters
-    query_metadata = Dict("api_key"   => key,
-                          "file_type" => "json",
-                          "series_id" => series)
-    query_obs = query_metadata
+    metadata_params = Dict("api_key"   => api_key,
+                           "file_type" => "json",
+                           "series_id" => series)
+    obs_params = copy(metadata_params)
 
     # Query observations. Expand query dict with kwargs. Do this first so we can use the
     # calculated realtime values for the metadata request.
-    for (i,j) in kwargs
-        query_obs[string(i)] = string(j)
+    for (key, value) in kwargs
+        obs_params[string(key)] = string(value)
     end
-    response_obs = HTTP.request("GET", obs_url, query_obs)
-    obs_json = JSON.json(string(response_obs))
-
-    # Confirm request okay
-    if haskey(obs_json, "error_code")
-
-        # If error 500 (Internal Server Error), we can retry our request. Otherwise, give
-        # up.
-        if obs_json["error_code"] == 500 && retries > 0
-            return get_data(f, series; retries=retries-1, kwargs...)
-        else
-            error(series, ": ", obs_json["error_message"], " (", obs_json["error_code"],")")
-        end
-
-    end
+    obs_response = HTTP.request("GET", obs_url, []; query=obs_params)
+    obs_json = JSON.parse(String(copy(obs_response.body)))
 
     # Parse observations
     realtime_start  = obs_json["realtime_start"]
@@ -76,16 +60,16 @@ function get_data(f::Fred, series::AbstractString;
     df = parse_observations(obs_json["observations"])
 
     # Query metadata
-    query_metadata["realtime_start"] = realtime_start
-    query_metadata["realtime_end"] = realtime_end
-    metadata_response = HTTP.request("GET", metadata_url, query_metadata)
-    metadata_json = JSON.json(string(metadata_response))
+    metadata_params["realtime_start"] = realtime_start
+    metadata_params["realtime_end"] = realtime_end
+    metadata_response = HTTP.request("GET", metadata_url, []; query=metadata_params)
+    metadata_json = JSON.parse(String(copy(metadata_response.body)))
+    # TODO catch StatusError and just return incomplete data to the caller
 
     # Parse metadata
     metadata_parsed = Dict{Symbol, AbstractString}()
     for k in ["id", "title", "units_short", "units", "seasonal_adjustment_short",
         "seasonal_adjustment", "frequency_short", "frequency", "notes"]
-        @compat key = Symbol(k)
         try
             metadata_parsed[Symbol(k)] = metadata_json["seriess"][1][k]
         catch err
@@ -104,7 +88,7 @@ function get_data(f::Fred, series::AbstractString;
 
     # format notes field
     metadata_parsed[:notes] = strip(replace(replace(
-        metadata_parse[:notes], r"[\r\n]", " "), r" +", " "))
+        metadata_parsed[:notes], r"[\r\n]", " "), r" +", " "))
 
     return FredSeries(metadata_parsed[:id], metadata_parsed[:title],
                       metadata_parsed[:units_short], metadata_parsed[:units],
