@@ -6,11 +6,11 @@ using Test
     s1 = get_data(f, "GDPC1")
 end
 
-@testset "Sanity tests on simply queries" begin
+@testset "Sanity tests on simple queries" begin
     function sanity_test_on_query_response(id)
         f = Fred()
         s = get_data(f, id)
-        @test s.id = id
+        @test s.id == id
         @test !isempty(s.data)
     end
 
@@ -24,8 +24,8 @@ end
     vintage_dates = "2015-01-01"
     s = get_data(f, "GDPC1"; units="chg", vintage_dates=vintage_dates)
     @test size(s.data) == (271, 4)
-    @test s.realtime_start = vintage_dates
-    @test s.realtime_end = vintage_dates
+    @test s.realtime_start == vintage_dates
+    @test s.realtime_end == vintage_dates
 end
 
 @testset "Bad requests throw exceptions" begin
