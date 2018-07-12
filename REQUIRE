@@ -2,4 +2,3 @@ julia 0.7-alpha
 DataFrames
 HTTP
 JSON
-Compat 0.41
