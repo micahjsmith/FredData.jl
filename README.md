@@ -134,13 +134,6 @@ Get fields of a series `s`:
 - `s.data`: The actual data; DataFrame with columns `:realtime_start`,
   `:realtime_end`, `:date`, `:value`
 
-## Notes
-
-Todo list:  
-☐ improve test coverage  
-☐ support creation of pseudo-vintages  
-☐ support methods to query other parts of the API, such as releases, tags, and search  
-
 [pkg-0.4-img]: http://pkg.julialang.org/badges/FredData_0.4.svg
 [pkg-0.4-url]: http://pkg.julialang.org/?pkg=FredData
 [pkg-0.5-img]: http://pkg.julialang.org/badges/FredData_0.5.svg
