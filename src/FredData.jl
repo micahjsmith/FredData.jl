@@ -6,6 +6,7 @@ module FredData
 using DataFrames
 using Dates
 using Printf
+using TimeZones
 import HTTP
 import JSON
 
@@ -23,6 +24,8 @@ const MAX_ATTEMPTS       = 3
 const FIRST_REALTIME     = Date(1776,07,04)
 const LAST_REALTIME      = Date(9999,12,31)
 const EARLY_VINTAGE_DATE = "1991-01-01"
+const FRED_DATE_FORMAT   = DateFormat("yyyy-mm-dd HH:MM:SSzz")
+const OUTPUT_TZ          = TimeZone("UTC")
 const DEFAULT_API_URL    = "https://api.stlouisfed.org/fred/"
 const API_KEY_LENGTH     = 32
 const KEY_ENV_NAME       = "FRED_API_KEY"

@@ -78,10 +78,8 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
         end
     end
 
-    # the last three chars are -05, for CST in St. Louis
     function parse_last_updated(last_updated)
-        timezone = last_updated[end-2:end]  # TODO
-        return DateTime(last_updated[1:end-3], "yyyy-mm-dd HH:MM:SS")
+        return DateTime(astimezone(ZonedDateTime(last_updated, FRED_DATE_FORMAT), OUTPUT_TZ))
     end
     last_updated = parse_last_updated(
         metadata_json["seriess"][1]["last_updated"])
