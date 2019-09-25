@@ -3,10 +3,13 @@ os:
   - linux
   - osx
 julia:
-  - 0.7
+  - 1.0
   - nightly
 matrix:
-    allow_failures:
-        - julia: nightly
+  allow_failures:
+  - julia: nightly
 notifications:
   email: false
+script:
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia --project --check-bounds=yes -e 'import Pkg; Pkg.build(); Pkg.test()'
