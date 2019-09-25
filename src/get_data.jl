@@ -74,7 +74,7 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
             metadata_parsed[Symbol(k)] = metadata_json["seriess"][1][k]
         catch err
             metadata_parsed[Symbol(k)] = ""
-            warn("Metadata '$k' not returned from server.")
+            @warn("Metadata '$k' not returned from server.")
         end
     end
 
@@ -174,14 +174,14 @@ function validate_args!(kwargs)
         end
         vds_early = map(x -> x<EARLY_VINTAGE_DATE, vds_arr)
         if any(vds_early)
-            warn(:vintage_dates, ": Early vintage date, data might not exist: ",
+            @warn(:vintage_dates, ": Early vintage date, data might not exist: ",
                 vds_arr[vds_early])
         end
     end
     # all remaining keys have unspecified behavior
     if length(d) > 0
         for k in keys(d)
-            warn(string(k), ": Bad key. Removed from query.")
+            @warn(string(k), ": Bad key. Removed from query.")
             deleteat!(kwargs, findall(x -> x[1]==k, kwargs))
         end
     end
