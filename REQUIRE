@@ -1,7 +1,0 @@
-julia 0.7-alpha
-DataFrames
-Dates
-HTTP
-JSON
-Printf
-TimeZones
