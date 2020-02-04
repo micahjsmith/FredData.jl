@@ -12,7 +12,7 @@ import JSON
 
 export
        # Fred object
-       Fred, get_api_url, set_api_url!, get_api_key,
+       Fred, fred_key, get_api_url, set_api_url!, get_api_key,
 
        # FredSeries object
        FredSeries,
@@ -67,20 +67,29 @@ mutable struct Fred
     end
 end
 Fred(key::AbstractString) = Fred(key, DEFAULT_API_URL)
-function Fred()
-    key = if KEY_ENV_NAME in keys(ENV)
+
+function fred_key()
+    if KEY_ENV_NAME in keys(ENV)
         ENV[KEY_ENV_NAME]
     elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
         open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
             rstrip(read(file, String))
         end
     else
+        nothing
+    end
+end
+
+function Fred()
+    key = fred_key()
+    if key === nothing
         error("FRED API Key not detected.")
     end
 
     println("API key loaded.")
     return Fred(key)
 end
+
 get_api_key(f::Fred) = f.key
 get_api_url(f::Fred) = f.url
 set_api_url!(f::Fred, url::AbstractString) = setfield!(f, :url, url)
