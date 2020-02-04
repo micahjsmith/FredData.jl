@@ -134,15 +134,7 @@ Get fields of a series `s`:
 - `s.data`: The actual data; DataFrame with columns `:realtime_start`,
   `:realtime_end`, `:date`, `:value`
 
-[pkg-0.4-img]: http://pkg.julialang.org/badges/FredData_0.4.svg
-[pkg-0.4-url]: http://pkg.julialang.org/?pkg=FredData
-[pkg-0.5-img]: http://pkg.julialang.org/badges/FredData_0.5.svg
-[pkg-0.5-url]: http://pkg.julialang.org/?pkg=FredData
-[pkg-0.6-img]: http://pkg.julialang.org/badges/FredData_0.6.svg
-[pkg-0.6-url]: http://pkg.julialang.org/?pkg=FredData
-[pkg-0.7-img]: http://pkg.julialang.org/badges/FredData_0.7.svg
-[pkg-0.7-url]: http://pkg.julialang.org/?pkg=FredData
-[travis-img]: https://travis-ci.org/micahjsmith/FredData.jl.svg?branch=master
-[travis-url]: https://travis-ci.org/micahjsmith/FredData.jl
+[travis-img]: https://travis-ci.com/micahjsmith/FredData.jl.svg?branch=master
+[travis-url]: https://travis-ci.com/micahjsmith/FredData.jl
 [appveyor-img]: https://ci.appveyor.com/api/projects/status/qmrotjcadtruev03/branch/master?svg=true
 [appveyor-url]: https://ci.appveyor.com/project/micahjsmith/freddata-jl
