@@ -1,6 +1,10 @@
 # News
 
-## v0.3.2 (2020-02-024)
+## v0.4.0 (2020-02-04)
+
+- Fix compatibility upper bounds
+
+## v0.3.2 (2020-02-04)
 
 - Fix compatibility issue with TimeZones.jl [#17](https://github.com/micahjsmith/FredData.jl/pull/17) by [@fratrik](https://github.com/fratrik).
 - Bump minimum version of TimeZones.jl to 0.11, in turn bumping minimum version of Julia to v1.
