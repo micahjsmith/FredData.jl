@@ -25,7 +25,7 @@ const FIRST_REALTIME     = Date(1776,07,04)
 const LAST_REALTIME      = Date(9999,12,31)
 const EARLY_VINTAGE_DATE = "1991-01-01"
 const FRED_DATE_FORMAT   = DateFormat("yyyy-mm-dd HH:MM:SSzz")
-const OUTPUT_TZ          = TimeZone("UTC")
+const OUTPUT_TZ_TYPE     = UTC
 const DEFAULT_API_URL    = "https://api.stlouisfed.org/fred/"
 const API_KEY_LENGTH     = 32
 const KEY_ENV_NAME       = "FRED_API_KEY"
@@ -66,21 +66,31 @@ mutable struct Fred
         return new(key, url)
     end
 end
+
 Fred(key::AbstractString) = Fred(key, DEFAULT_API_URL)
-function Fred()
-    key = if KEY_ENV_NAME in keys(ENV)
+
+key_file() = joinpath(homedir(), KEY_FILE_NAME)
+
+function load_fred_key()
+    if KEY_ENV_NAME in keys(ENV)
         ENV[KEY_ENV_NAME]
-    elseif isfile(joinpath(homedir(), KEY_FILE_NAME))
-        open(joinpath(homedir(), KEY_FILE_NAME), "r") do file
+    elseif isfile(key_file())
+        open(key_file(), "r") do file
             rstrip(read(file, String))
         end
     else
         error("FRED API Key not detected.")
     end
+end
 
+has_fred_key() = KEY_ENV_NAME in keys(ENV) || isfile(key_file())
+
+function Fred()
+    key = load_fred_key()
     println("API key loaded.")
     return Fred(key)
 end
+
 get_api_key(f::Fred) = f.key
 get_api_url(f::Fred) = f.url
 set_api_url!(f::Fred, url::AbstractString) = setfield!(f, :url, url)
