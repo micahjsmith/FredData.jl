@@ -1,8 +1,14 @@
 # News
 
+## v0.3.2 (2020-02-024)
+
+- Fix compatibility issue with TimeZones.jl [#17](https://github.com/micahjsmith/FredData.jl/pull/17) by [@fratrik](https://github.com/fratrik).
+- Bump minimum version of TimeZones.jl to 0.11, in turn bumping minimum version of Julia to v1.
+
 ## v0.3.1 (2019-09-30)
 
-- Fix usage of `@warn` ([#15](https://github.com/micahjsmith/FredData.jl/pull/15))
+- Fix usage of `@warn`. [#15](https://github.com/micahjsmith/FredData.jl/pull/15) by
+    [@greimel](https://github.com/greimel).
 
 ## v0.3.0 (2018-07-12)
 
