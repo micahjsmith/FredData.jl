@@ -13,9 +13,9 @@ TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 
 [compat]
 julia = "1"
-DataFrames = "≥ 0.18"
-HTTP = "≥ 0.8"
-JSON = "≥ 0.18"
+DataFrames = "≥ 0.18, <1"
+HTTP = "≥ 0.8, <1"
+JSON = "≥ 0.18, <1"
 TimeZones = "0.11, 1"
 
 [extras]
