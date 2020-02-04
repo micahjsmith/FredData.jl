@@ -79,7 +79,7 @@ function get_data(f::Fred, series::AbstractString; kwargs...)
     end
 
     function parse_last_updated(last_updated)
-        return DateTime(ZonedDateTime(last_updated, FRED_DATE_FORMAT), OUTPUT_TZ)
+        return DateTime(ZonedDateTime(last_updated, FRED_DATE_FORMAT), OUTPUT_TZ_TYPE)
     end
     last_updated = parse_last_updated(
         metadata_json["seriess"][1]["last_updated"])
