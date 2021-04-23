@@ -1,17 +1,12 @@
 <!-- [![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://micahjsmith.github.io/FredData.jl/stable) -->
-<!-- [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://micahjsmith.github.io/FredData.jl/dev) -->
-<!-- [![Build Status](https://github.com/micahjsmith/FredData.jl/workflows/CI/badge.svg)](https://github.com/micahjsmith/FredData.jl/actions) -->
-<!-- [![Coverage](https://codecov.io/gh/micahjsmith/FredData.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/micahjsmith/FredData.jl) -->
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://micahjsmith.github.io/FredData.jl/dev)
+[![Tests](https://github.com/micahjsmith/FredData.jl/actions/workflows/Tests.yml/badge.svg)](https://github.com/micahjsmith/FredData.jl/actions/workflows/Tests.yml)
+[![Coverage](https://codecov.io/gh/micahjsmith/FredData.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/micahjsmith/FredData.jl)
 
 # FredData.jl
 
 A third-party Julia library to pull data from
 [Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/) (FRED).
-
-|                         | Does this thing work?                                           |
-| ----------------------- | :-------------------------------------------------------------- |
-| **Documentation**       | \<this page, for now\>                                          |
-| **Build Status**        | [![][travis-img]][travis-url] [![][appveyor-img]][appveyor-url] |
 
 ## Disclaimer
 
