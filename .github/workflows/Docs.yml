@@ -3,7 +3,8 @@ on:
   push:
     branches:
       - master
-    tags: '*'
+    tags:
+      - '*'
 jobs:
   docs:
     name: Documentation
