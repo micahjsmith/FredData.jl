@@ -2,6 +2,8 @@
 [![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://micahjsmith.github.io/FredData.jl/dev)
 [![Tests](https://github.com/micahjsmith/FredData.jl/actions/workflows/Tests.yml/badge.svg)](https://github.com/micahjsmith/FredData.jl/actions/workflows/Tests.yml)
 [![Coverage](https://codecov.io/gh/micahjsmith/FredData.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/micahjsmith/FredData.jl)
+[![version](https://juliahub.com/docs/FredData/version.svg)](https://juliahub.com/ui/Packages/FredData/SEoaS)
+[![pkgeval](https://juliahub.com/docs/FredData/pkgeval.svg)](https://juliahub.com/ui/Packages/FredData/SEoaS)
 
 # FredData.jl
 
