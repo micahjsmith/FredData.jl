@@ -8,64 +8,19 @@
 A third-party Julia library to pull data from
 [Federal Reserve Economic Data](https://research.stlouisfed.org/fred2/) (FRED).
 
-## Disclaimer
+* Homepage: https://github.com/micahjsmith/FredData.jl
+* Documentation: https://micahjsmith.github.io/FredData.jl/dev
+* License: [MIT License](LICENSE)
 
+## Disclaimer
 
 *FredData* is not affiliated in any way with Federal Reserve Bank of St. Louis and is not
 officially maintained or otherwise supported by Federal Reserve Bank of St. Louis.
 
-*FredData* is free software and is issued under the MIT [license](LICENSE.md).
+## Quickstart
 
-## Setup
+Here is what you can do with *FredData*:
 
-*FredData* uses FRED's [Developer API](https://research.stlouisfed.org/docs/api/). As such,
-you must register an API key [here](https://research.stlouisfed.org/docs/api/api_key.html)
-in order to pull from the FRED servers.
-
-Download the package with
-```julia
-julia> Pkg.add("FredData")
-```
-
-Make the FRED API key that you just registered accessible to *FredData* in one of several
-ways. Ideally, we store your key such that it persists across sessions. In subsequent
-sections, we'll assume that you *have* stored your key in one of these ways such that it can
-be detected automatically. This will allow the use of the zero-argument constructor.
-
-1. Populate a configuration file `~/.freddatarc`.
-
-    ```julia
-    julia> open(joinpath(homedir(), ".freddatarc"), "w") do f
-               write(f, "0123456789abcdef0123456789abcdef")
-           end
-    ```
-2. Populate the environment variable `FRED_API_KEY` such that it remains across sessions.
-
-    ```julia
-    # on macOS/Linux
-    shell> echo "export FRED_API_KEY=0123456789abcdef0123456789abcdef" >> ~/.bashrc
-
-    # on Windows 7+
-    shell> setx FRED_API_KEY 0123456789abcdef0123456789abcdef
-    ```
-
-Another option is to provide your API key to the constructor every time you wish to use the
-package.
-
-3. Provide the `Fred` constructor with your API key directly.
-
-    ```julia
-    julia> f = Fred("0123456789abcdef0123456789abcdef")
-    FRED API Connection
-            url: https://api.stlouisfed.org/fred/
-            key: 0123456789abcdef0123456789abcdef
-    ```
-
-## Usage
-
-### Basic Usage
-
-Query observations and metadata.
 ```julia
 julia> using FredData
 
@@ -90,51 +45,4 @@ FredSeries
         data: 275x4 DataFrame with columns [:realtime_start,:realtime_end,:date,:value]
 ```
 
-### Advanced Usage
-
-Add optional arguments. All optional arguments specified by the FRED API are supported.
-```julia
-using FredData
-f = Fred()
-data = get_data(f, "GDPC1"; vintage_dates="2008-09-15")
-data = get_data(f, "GDPC1"; frequency="a", units="chg")
-```
-
-For a full list of optional arguments, see `?get_data` or
-[here](https://research.stlouisfed.org/docs/api/fred/series_observations.html)
-
-### The `Fred` type
-
-The `Fred` type represents a connection to the FRED API.
-
-Get and set fields.
-- `get_api_key(f::Fred)`: Get the base URL used to connect to the server
-- `get_api_url(f::Fred)`: Get the base URL used to connect to the server
-- `set_api_url!(f::Fred, url::AbstractString)`: Set the base URL used to connect to the
-  server
-
-### The `FredSeries` type
-
-The `FredSeries` type contains the data in a query response.
-
-Get fields of a series `s`:
-- `s.id`: Series ID
-- `s.title`: Series title
-- `s.units_short`: Units (abbr.)
-- `s.units`: Units
-- `s.seas_adj_short`: Seasonal adjustment (abbr.)
-- `s.seas_adj`: Seasonal adjustment
-- `s.freq_short`: *Native* frequency (abbr.)
-- `s.freq`: *Native* frequency
-- `s.realtime_start`: Date realtime period starts
-- `s.realtime_end`: Date realtime period ends
-- `s.last_updated`: Date series last updated
-- `s.notes`: Series notes
-- `s.trans_short`: Transformation of queried data (abbr.)
-- `s.data`: The actual data; DataFrame with columns `:realtime_start`,
-  `:realtime_end`, `:date`, `:value`
-
-[travis-img]: https://travis-ci.com/micahjsmith/FredData.jl.svg?branch=master
-[travis-url]: https://travis-ci.com/micahjsmith/FredData.jl
-[appveyor-img]: https://ci.appveyor.com/api/projects/status/qmrotjcadtruev03/branch/master?svg=true
-[appveyor-url]: https://ci.appveyor.com/project/micahjsmith/freddata-jl
+For full usage, refer to the [documentation](https://micahjsmith.github.io/FredData.jl/dev)

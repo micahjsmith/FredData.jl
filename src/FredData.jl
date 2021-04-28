@@ -38,12 +38,12 @@ A connection to the Fred API.
 Constructors
 ------------
 - `Fred()`: Key detected automatically. First, looks for the environment variable
-    FRED_API_KEY, then looks for the file ~/.freddatarc.
+    `FRED_API_KEY`, then looks for the file `~/.freddatarc`.
 - `Fred(key::AbstractString)`: User specifies key directly
 
 Arguments
 ---------
-- `key`: Registration key provided by the Fred.
+- `key`: Registration key provided by FRED.
 
 Notes
 -----
@@ -91,8 +91,13 @@ function Fred()
     return Fred(key)
 end
 
+"""Get the FRED API key that is used for this connection"""
 get_api_key(f::Fred) = f.key
+
+"""Get the base URL used to connect to the FRED server"""
 get_api_url(f::Fred) = f.url
+
+"""Set the base URL used to connect to the FRED server"""
 set_api_url!(f::Fred, url::AbstractString) = setfield!(f, :url, url)
 
 function Base.show(io::IO, f::Fred)
@@ -110,20 +115,21 @@ FredSeries(...)
 Represent a single data series, and all associated metadata, as queried from FRED.
 
 The following fields are available:
-- `id`
-- `title`
-- `units_short`
-- `units`
-- `seas_adj_short`
-- `seas_adj`
-- `freq_short`
-- `freq`
-- `realtime_start`
-- `realtime_end`
-- `last_updated`
-- `notes`
-- `trans_short`
-- `data`
+- `id`: Series ID
+- `title`: Series title
+- `units_short`: Units (abbr.)
+- `units`: Units
+- `seas_adj_short`: Seasonal adjustment (abbr.)
+- `seas_adj`:Seasonal adjustment
+- `freq_short`:*Native* frequency (abbr.)
+- `freq`:*Native* frequency
+- `realtime_start`:Date realtime period starts
+- `realtime_end`:Date realtime period ends
+- `last_updated`:Date series last updated
+- `notes`:Series notes
+- `trans_short`:Transformation of queried data (abbr.)
+- `data`:The actual data; DataFrame with columns `:realtime_start`,
+  `:realtime_end`, `:date`, `:value`
 
 """
 struct FredSeries
