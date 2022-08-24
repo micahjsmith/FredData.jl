@@ -1,7 +1,7 @@
 name = "FredData"
 uuid = "6e85b7ee-7d24-5488-b1b7-e4f4198c51ac"
 author = ["Micah Smith <micahjsmith@gmail.com>"]
-version = "0.5.0"
+version = "0.6.0"
 
 [deps]
 DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
@@ -13,7 +13,7 @@ TimeZones = "f269a46b-ccf7-5d73-abea-4c690281aa53"
 
 [compat]
 DataFrames = "0.18, 0.19, 0.20, 0.21, 0.22, 1"
-HTTP = "0.8, 0.9"
+HTTP = "0.8, 0.9, 1.2"
 JSON = "0.18, 0.19, 0.20, 0.21"
 TimeZones = "0.11, 1"
 julia = "1"

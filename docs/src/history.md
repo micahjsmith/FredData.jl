@@ -1,5 +1,9 @@
 # News
 
+## 0.6.0 (2022-08-23)
+
+- Add HTTP.jl v1 compatibility
+
 ## v0.5.0 (2021-04-23)
 
 - Add DataFrames.jl v1 compatibility
